@@ -1,40 +1,596 @@
 
+/* =========================================
+   AULAPLAN — HORARIO ACADÉMICO
+   Diseño visual del calendario semanal
+========================================= */
+
+.schedule-page {
+    width: 100%;
+    min-width: 0;
+    color: var(--text-primary, #f1f5f9);
+    animation: scheduleFadeIn .35s ease;
+}
+
+@keyframes scheduleFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+}
+
+.schedule-header h1,
+.schedule-header h2 {
+    margin: 0;
+    font-size: clamp(22px, 3vw, 29px);
+    font-weight: 750;
+    letter-spacing: -0.7px;
+    color: var(--text-primary, #f8fafc);
+}
+
+.schedule-header p {
+    margin: 7px 0 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.schedule-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 43px;
+    padding: 0 19px;
+    border: 0;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(79, 70, 229, .22);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.schedule-primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, .32);
+}
+
+/* =========================================
+   RESUMEN DE HORARIO
+========================================= */
+
+.schedule-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 27px;
+}
+
+.schedule-summary-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 19px 21px;
+    min-height: 95px;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, .14));
+    border-radius: 15px;
+    background: var(--card-bg, rgba(30, 41, 59, .55));
+}
+
+.schedule-summary-card span,
+.schedule-summary-card p {
+    margin: 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.schedule-summary-card strong {
+    color: var(--text-primary, #f8fafc);
+    font-size: 27px;
+    font-weight: 750;
+    line-height: 1;
+}
+
+/* =========================================
+   CONTENEDOR DEL CALENDARIO
+========================================= */
+
+.schedule-calendar-section {
+    width: 100%;
+    min-width: 0;
+    margin-top: 10px;
+}
+
+.schedule-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.schedule-section-heading h2,
+.schedule-section-heading h3 {
+    margin: 0;
+    color: var(--text-primary, #f1f5f9);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* =========================================
+   CALENDARIO SEMANAL
+========================================= */
+
+.schedule-week {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+    align-items: stretch;
+}
+
+.schedule-day {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 220px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, .15));
+    border-radius: 13px;
+    background: var(--card-bg, rgba(30, 41, 59, .42));
+    transition: border-color .2s ease, background .2s ease;
+}
+
+.schedule-day:hover {
+    border-color: rgba(129, 140, 248, .4);
+    background: var(--card-hover-bg, rgba(51, 65, 85, .45));
+}
+
+/* Cabecera del día */
+
+.schedule-day-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 47px;
+    padding: 10px 5px;
+    border-bottom: 1px solid var(--border-color, rgba(148, 163, 184, .13));
+    background: rgba(99, 102, 241, .07);
+    color: var(--text-primary, #e2e8f0);
+    font-size: 12px;
+    font-weight: 750;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+/* Contenido del día */
+
+.schedule-day-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 9px;
+    padding: 9px;
+    min-width: 0;
+}
+
+/* =========================================
+   TARJETAS DE ASIGNATURAS
+========================================= */
+
+.schedule-class-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 11px 9px;
+    overflow: hidden;
+    border: 1px solid rgba(129, 140, 248, .20);
+    border-left: 3px solid #818cf8;
+    border-radius: 9px;
+    background: rgba(99, 102, 241, .09);
+    transition: transform .2s ease, background .2s ease;
+}
+
+.schedule-class-card:hover {
+    transform: translateY(-2px);
+    background: rgba(99, 102, 241, .15);
+}
+
+/* Horario de la clase */
+
+.schedule-class-time {
+    color: #a5b4fc;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.4;
+    letter-spacing: .1px;
+    overflow-wrap: anywhere;
+}
+
+/* Información de la asignatura */
+
+.schedule-class-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.schedule-class-info strong,
+.schedule-class-info h4 {
+    margin: 0;
+    color: var(--text-primary, #f8fafc);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.schedule-class-info span,
+.schedule-class-info p {
+    margin: 0;
+    color: var(--text-secondary, #a1aab9);
+    font-size: 10px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   BOTONES DE ACCIÓN
+========================================= */
+
 .schedule-card-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 6px;
+    margin-top: 2px;
 }
 
 .schedule-edit-button,
 .schedule-delete-button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--border-color, rgba(148,163,184,.2));
-    border-radius: 8px;
-    background: transparent;
-    font-size: 14px;
+    width: 29px;
+    height: 29px;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, .2));
+    border-radius: 7px;
+    background: rgba(15, 23, 42, .25);
+    font-size: 13px;
     cursor: pointer;
-    transition: background .2s, transform .2s;
+    transition: background .2s ease, transform .2s ease;
 }
 
 .schedule-edit-button {
-    color: var(--text-primary, #f1f5f9);
+    color: #a5b4fc;
 }
 
 .schedule-edit-button:hover {
-    background: rgba(99,102,241,.15);
+    background: rgba(99, 102, 241, .2);
     transform: translateY(-1px);
 }
 
 .schedule-delete-button {
-    border-color: rgba(248,113,113,.25);
+    border-color: rgba(248, 113, 113, .25);
     color: #f87171;
 }
 
 .schedule-delete-button:hover {
-    background: rgba(248,113,113,.14);
+    background: rgba(248, 113, 113, .14);
     transform: translateY(-1px);
+}
+
+/* =========================================
+   DÍAS SIN CLASES
+========================================= */
+
+.schedule-no-classes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 100px;
+    padding: 12px 5px;
+    color: var(--text-secondary, #64748b);
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.schedule-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 45px 20px;
+    border: 1px dashed var(--border-color, rgba(148, 163, 184, .25));
+    border-radius: 15px;
+    color: var(--text-secondary, #94a3b8);
+    text-align: center;
+}
+
+.schedule-empty p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.schedule-empty-icon {
+    font-size: 35px;
+    opacity: .8;
+}
+
+/* =========================================
+   MODAL DE ASIGNATURAS
+========================================= */
+
+.schedule-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(2, 6, 23, .76);
+    backdrop-filter: blur(7px);
+}
+
+.schedule-modal-content {
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding: 25px;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, .2));
+    border-radius: 18px;
+    background: var(--modal-bg, #172033);
+    color: var(--text-primary, #f8fafc);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .35);
+}
+
+.schedule-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.schedule-modal-header h2,
+.schedule-modal-header h3 {
+    margin: 0;
+    color: var(--text-primary, #f8fafc);
+    font-size: 20px;
+    font-weight: 750;
+}
+
+/* =========================================
+   FORMULARIO
+========================================= */
+
+#schedule-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#schedule-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    color: var(--text-primary, #e2e8f0);
+    font-size: 12px;
+    font-weight: 650;
+}
+
+#schedule-form input,
+#schedule-form select,
+#schedule-form textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, .25));
+    border-radius: 9px;
+    outline: none;
+    background: var(--input-bg, rgba(15, 23, 42, .65));
+    color: var(--text-primary, #f8fafc);
+    font-family: inherit;
+    font-size: 13px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+#schedule-form input:focus,
+#schedule-form select:focus,
+#schedule-form textarea:focus {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, .13);
+}
+
+#schedule-form select option {
+    background: #172033;
+    color: #f8fafc;
+}
+
+#schedule-form input::placeholder,
+#schedule-form textarea::placeholder {
+    color: #64748b;
+}
+
+.schedule-time-fields,
+.schedule-validity-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.schedule-error,
+#schedule-error {
+    padding: 10px 12px;
+    border: 1px solid rgba(248, 113, 113, .25);
+    border-radius: 9px;
+    background: rgba(248, 113, 113, .08);
+    color: #fca5a5;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* =========================================
+   BOTONES DEL MODAL
+========================================= */
+
+.schedule-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.schedule-modal-actions button {
+    min-height: 40px;
+    padding: 0 17px;
+    border: 1px solid var(--border-color, rgba(148, 163, 184, .2));
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.schedule-modal-actions button:hover {
+    transform: translateY(-1px);
+}
+
+#schedule-cancel {
+    background: transparent;
+    color: var(--text-secondary, #cbd5e1);
+}
+
+#schedule-cancel:hover {
+    background: rgba(148, 163, 184, .1);
+}
+
+#schedule-save {
+    border-color: transparent;
+    background: #4f46e5;
+    color: white;
+}
+
+#schedule-save:hover {
+    background: #4338ca;
+}
+
+/* =========================================
+   RESPONSIVE — TABLETS
+========================================= */
+
+@media (max-width: 1100px) {
+    .schedule-week {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .schedule-week {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .schedule-day {
+        min-height: 180px;
+    }
+
+    .schedule-summary {
+        gap: 10px;
+    }
+
+    .schedule-summary-card {
+        padding: 15px;
+    }
+}
+
+/* =========================================
+   RESPONSIVE — CELULARES
+========================================= */
+
+@media (max-width: 480px) {
+    .schedule-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .schedule-primary-button {
+        width: 100%;
+    }
+
+    .schedule-week {
+        grid-template-columns: 1fr;
+    }
+
+    .schedule-day {
+        min-height: auto;
+    }
+
+    .schedule-day-header {
+        justify-content: flex-start;
+        padding-left: 13px;
+    }
+
+    .schedule-day-content {
+        padding: 10px;
+    }
+
+    .schedule-summary-card strong {
+        font-size: 23px;
+    }
+
+    .schedule-modal {
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .schedule-modal-content {
+        padding: 19px;
+        max-height: calc(100vh - 24px);
+    }
+
+    .schedule-time-fields,
+    .schedule-validity-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .schedule-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .schedule-modal-actions button {
+        width: 100%;
+    }
 }
