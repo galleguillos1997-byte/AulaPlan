@@ -15,6 +15,10 @@ const colors = [
     '#475569'
 ];
 
+// ==========================================
+// SEGURIDAD: ESCAPAR HTML
+// ==========================================
+
 function escapeHTML(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
         '&': '&amp;',
@@ -70,7 +74,6 @@ export async function renderSubjectsUI() {
         </main>
 
         <div id="subject-modal" class="subject-modal" hidden>
-
             <div class="subject-modal-content">
 
                 <div class="subject-modal-header">
@@ -128,7 +131,6 @@ export async function renderSubjectsUI() {
                     <label>Color identificador</label>
 
                     <div id="subject-colors" class="subject-colors">
-
                         ${colors.map((color, index) => `
                             <button
                                 type="button"
@@ -138,7 +140,6 @@ export async function renderSubjectsUI() {
                                 aria-label="Seleccionar color ${index + 1}">
                             </button>
                         `).join('')}
-
                     </div>
 
                     <div
@@ -169,7 +170,6 @@ export async function renderSubjectsUI() {
     `;
 
     bindSubjectEvents();
-
     await loadSubjects();
 }
 
@@ -190,8 +190,11 @@ async function loadSubjects() {
 
         subjects = data || [];
 
-        document.getElementById('subjects-total').textContent =
-            subjects.length;
+        const total = document.getElementById('subjects-total');
+
+        if (total) {
+            total.textContent = subjects.length;
+        }
 
         renderSubjectCards();
 
@@ -202,6 +205,7 @@ async function loadSubjects() {
             <div class="subject-empty">
                 <h3>No fue posible cargar tus asignaturas</h3>
                 <p>${escapeHTML(error.message)}</p>
+
                 <button id="subject-retry" class="subject-primary-button">
                     Reintentar
                 </button>
@@ -219,6 +223,8 @@ async function loadSubjects() {
 
 function renderSubjectCards() {
     const list = document.getElementById('subjects-list');
+
+    if (!list) return;
 
     if (!subjects.length) {
         list.innerHTML = `
@@ -274,7 +280,6 @@ function renderSubjectCards() {
                     </button>
 
                 </div>
-
             </div>
 
             <h3>${escapeHTML(subject.name)}</h3>
@@ -284,13 +289,11 @@ function renderSubjectCards() {
             </p>
 
             <div class="subject-card-details">
-
                 <span>Docente</span>
 
                 <strong>
                     ${escapeHTML(subject.teacher || 'No especificado')}
                 </strong>
-
             </div>
 
             ${subject.description ? `
@@ -344,9 +347,7 @@ function bindSubjectEvents() {
                     });
 
                 button.classList.add('selected');
-
             });
-
         });
 }
 
@@ -413,7 +414,6 @@ function editSubject(id) {
                 'selected',
                 button.dataset.color === (subject.color || colors[0])
             );
-
         });
 
     document.getElementById('subject-error').textContent = '';
@@ -466,7 +466,6 @@ async function saveSubject(event) {
 
     try {
 
-        // Obtener usuario autenticado
         const {
             data: userData,
             error: userError
@@ -480,7 +479,6 @@ async function saveSubject(event) {
             );
         }
 
-        // Preparar datos
         const payload = {
             user_id: userData.user.id,
             name,
@@ -500,14 +498,14 @@ async function saveSubject(event) {
             result = await supabase
                 .from('subjects')
                 .update(payload)
-                .eq('id', subjectId);
+                .eq('id', subjectId)
+                .eq('user_id', userData.user.id);
 
         } else {
 
             result = await supabase
                 .from('subjects')
                 .insert(payload);
-
         }
 
         if (result.error) throw result.error;
@@ -531,55 +529,81 @@ async function saveSubject(event) {
         saveButton.textContent = wasEditing
             ? 'Guardar cambios'
             : 'Guardar asignatura';
-
     }
 }
 
 // ==========================================
-// ELIMINAR ASIGNATURA
+// ELIMINAR ASIGNATURA Y SUS HORARIOS
 // ==========================================
 
-
 async function deleteSubject(id) {
+
+    const subject = subjects.find(item => item.id === id);
+
+    if (!subject) {
+        alert('No se encontró la asignatura seleccionada.');
+        return;
+    }
+
     const confirmed = confirm(
-        '¿Estás seguro de eliminar esta asignatura?\n\n' +
-        'También se eliminarán todos los horarios de clases asociados. ' +
+        `¿Estás seguro de eliminar "${subject.name}"?\n\n` +
+        'También se eliminarán todos los horarios de clases asociados.\n\n' +
         'Esta acción no se puede deshacer.'
     );
 
     if (!confirmed) return;
 
     try {
-        const { data: { user }, error: userError } =
-            await supabase.auth.getUser();
+
+        const {
+            data: userData,
+            error: userError
+        } = await supabase.auth.getUser();
 
         if (userError) throw userError;
-        if (!user) throw new Error('No se encontró la sesión del usuario.');
 
-        // 1. Eliminar los horarios asociados
+        if (!userData.user) {
+            throw new Error('No se encontró la sesión del usuario.');
+        }
+
+        // 1. Eliminar horarios asociados a la asignatura.
+
         const { error: schedulesError } = await supabase
             .from('class_schedules')
             .delete()
             .eq('subject_id', id)
-            .eq('user_id', user.id);
+            .eq('user_id', userData.user.id);
 
         if (schedulesError) throw schedulesError;
 
-        // 2. Eliminar la asignatura
+        // 2. Eliminar la asignatura.
+
         const { error: subjectError } = await supabase
             .from('subjects')
             .delete()
             .eq('id', id)
-            .eq('user_id', user.id);
+            .eq('user_id', userData.user.id);
 
         if (subjectError) throw subjectError;
 
-        alert('Asignatura y horarios asociados eliminados correctamente.');
+        // 3. Actualizar la lista sin recargar toda la página.
 
-        // 3. Actualizar la aplicación
-        location.reload();
+        subjects = subjects.filter(item => item.id !== id);
+
+        const total = document.getElementById('subjects-total');
+
+        if (total) {
+            total.textContent = subjects.length;
+        }
+
+        renderSubjectCards();
+
+        alert(
+            'La asignatura y sus horarios asociados fueron eliminados correctamente.'
+        );
 
     } catch (error) {
+
         console.error('Error al eliminar asignatura:', error);
 
         alert(
