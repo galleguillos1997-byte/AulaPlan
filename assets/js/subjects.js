@@ -25,6 +25,10 @@ function escapeHTML(value) {
     })[character]);
 }
 
+// ==========================================
+// INICIAR MÓDULO
+// ==========================================
+
 export async function renderSubjectsUI() {
     const app = document.getElementById('dashboard-view-content');
 
@@ -35,6 +39,7 @@ export async function renderSubjectsUI() {
 
     app.innerHTML = `
         <main class="subjects-page">
+
             <header class="subjects-header">
                 <div>
                     <h1>Mis asignaturas</h1>
@@ -51,18 +56,21 @@ export async function renderSubjectsUI() {
                     <span>Total de asignaturas</span>
                     <strong id="subjects-total">0</strong>
                 </div>
+
                 <div>
-                    <span>Asignaturas registradas</span>
-                    <strong>Mi espacio académico</strong>
+                    <span>Espacio académico</span>
+                    <strong>Mis ramos</strong>
                 </div>
             </section>
 
             <section id="subjects-list" class="subjects-grid">
                 <p>Cargando asignaturas...</p>
             </section>
+
         </main>
 
         <div id="subject-modal" class="subject-modal" hidden>
+
             <div class="subject-modal-content">
 
                 <div class="subject-modal-header">
@@ -70,59 +78,104 @@ export async function renderSubjectsUI() {
                         <h2 id="subject-modal-title">Nueva asignatura</h2>
                         <p>Completa los datos de tu ramo.</p>
                     </div>
+
                     <button type="button" id="subject-close">✕</button>
                 </div>
 
                 <form id="subject-form">
 
-                    <label for="subject-name">Nombre de la asignatura *</label>
-                    <input id="subject-name" maxlength="100"
-                        placeholder="Ej. Matemáticas" required>
+                    <label for="subject-name">
+                        Nombre de la asignatura *
+                    </label>
 
-                    <label for="subject-code">Código de asignatura</label>
-                    <input id="subject-code" maxlength="30"
-                        placeholder="Ej. MAT101">
+                    <input
+                        id="subject-name"
+                        maxlength="100"
+                        placeholder="Ej. Matemáticas"
+                        required
+                    >
 
-                    <label for="subject-teacher">Docente</label>
-                    <input id="subject-teacher" maxlength="100"
-                        placeholder="Nombre del profesor">
+                    <label for="subject-code">
+                        Código de asignatura
+                    </label>
 
-                    <label for="subject-description">Descripción</label>
-                    <textarea id="subject-description" maxlength="500"
-                        placeholder="Información adicional sobre la asignatura"></textarea>
+                    <input
+                        id="subject-code"
+                        maxlength="30"
+                        placeholder="Ej. MAT101"
+                    >
+
+                    <label for="subject-teacher">
+                        Docente
+                    </label>
+
+                    <input
+                        id="subject-teacher"
+                        maxlength="100"
+                        placeholder="Nombre del profesor"
+                    >
+
+                    <label for="subject-description">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        id="subject-description"
+                        maxlength="500"
+                        placeholder="Información adicional sobre la asignatura"
+                    ></textarea>
 
                     <label>Color identificador</label>
+
                     <div id="subject-colors" class="subject-colors">
+
                         ${colors.map((color, index) => `
-                            <button type="button"
+                            <button
+                                type="button"
                                 class="subject-color-option ${index === 0 ? 'selected' : ''}"
                                 data-color="${color}"
                                 style="background:${color}"
                                 aria-label="Seleccionar color ${index + 1}">
                             </button>
                         `).join('')}
+
                     </div>
 
-                    <div id="subject-error" class="subject-error"></div>
+                    <div
+                        id="subject-error"
+                        class="subject-error"
+                        role="alert">
+                    </div>
 
                     <div class="subject-modal-actions">
+
                         <button type="button" id="subject-cancel">
                             Cancelar
                         </button>
-                        <button type="submit" class="subject-primary-button"
+
+                        <button
+                            type="submit"
+                            class="subject-primary-button"
                             id="subject-save">
                             Guardar asignatura
                         </button>
+
                     </div>
 
                 </form>
+
             </div>
         </div>
     `;
 
     bindSubjectEvents();
+
     await loadSubjects();
 }
+
+// ==========================================
+// CONSULTAR ASIGNATURAS
+// ==========================================
 
 async function loadSubjects() {
     const list = document.getElementById('subjects-list');
@@ -147,12 +200,22 @@ async function loadSubjects() {
 
         list.innerHTML = `
             <div class="subject-empty">
-                No fue posible cargar tus asignaturas.
-                Intenta nuevamente.
+                <h3>No fue posible cargar tus asignaturas</h3>
+                <p>${escapeHTML(error.message)}</p>
+                <button id="subject-retry" class="subject-primary-button">
+                    Reintentar
+                </button>
             </div>
         `;
+
+        document.getElementById('subject-retry')
+            ?.addEventListener('click', loadSubjects);
     }
 }
+
+// ==========================================
+// MOSTRAR TARJETAS
+// ==========================================
 
 function renderSubjectCards() {
     const list = document.getElementById('subjects-list');
@@ -160,12 +223,22 @@ function renderSubjectCards() {
     if (!subjects.length) {
         list.innerHTML = `
             <div class="subject-empty">
+
                 <div class="subject-empty-icon">▤</div>
+
                 <h3>Aún no tienes asignaturas</h3>
-                <p>Agrega tu primer ramo para comenzar a organizar tu vida académica.</p>
-                <button class="subject-primary-button" id="subject-empty-new">
+
+                <p>
+                    Agrega tu primer ramo para comenzar
+                    a organizar tu vida académica.
+                </p>
+
+                <button
+                    class="subject-primary-button"
+                    id="subject-empty-new">
                     + Agregar mi primera asignatura
                 </button>
+
             </div>
         `;
 
@@ -176,21 +249,32 @@ function renderSubjectCards() {
     }
 
     list.innerHTML = subjects.map(subject => `
-        <article class="subject-card"
+        <article
+            class="subject-card"
             style="--subject-color:${escapeHTML(subject.color || colors[0])}">
 
             <div class="subject-card-top">
+
                 <span class="subject-color-indicator"></span>
 
                 <div class="subject-card-actions">
-                    <button type="button"
-                        data-edit="${subject.id}"
-                        aria-label="Editar asignatura">✎</button>
 
-                    <button type="button"
-                        data-delete="${subject.id}"
-                        aria-label="Eliminar asignatura">✕</button>
+                    <button
+                        type="button"
+                        data-edit="${escapeHTML(subject.id)}"
+                        aria-label="Editar asignatura">
+                        ✎
+                    </button>
+
+                    <button
+                        type="button"
+                        data-delete="${escapeHTML(subject.id)}"
+                        aria-label="Eliminar asignatura">
+                        ✕
+                    </button>
+
                 </div>
+
             </div>
 
             <h3>${escapeHTML(subject.name)}</h3>
@@ -200,8 +284,13 @@ function renderSubjectCards() {
             </p>
 
             <div class="subject-card-details">
+
                 <span>Docente</span>
-                <strong>${escapeHTML(subject.teacher || 'No especificado')}</strong>
+
+                <strong>
+                    ${escapeHTML(subject.teacher || 'No especificado')}
+                </strong>
+
             </div>
 
             ${subject.description ? `
@@ -226,31 +315,47 @@ function renderSubjectCards() {
     });
 }
 
+// ==========================================
+// EVENTOS DEL FORMULARIO
+// ==========================================
+
 function bindSubjectEvents() {
+
     document.getElementById('subject-new')
-        .addEventListener('click', openNewSubject);
+        ?.addEventListener('click', openNewSubject);
 
     document.getElementById('subject-close')
-        .addEventListener('click', closeSubjectModal);
+        ?.addEventListener('click', closeSubjectModal);
 
     document.getElementById('subject-cancel')
-        .addEventListener('click', closeSubjectModal);
+        ?.addEventListener('click', closeSubjectModal);
 
     document.getElementById('subject-form')
-        .addEventListener('submit', saveSubject);
+        ?.addEventListener('submit', saveSubject);
 
     document.querySelectorAll('.subject-color-option')
         .forEach(button => {
+
             button.addEventListener('click', () => {
+
                 document.querySelectorAll('.subject-color-option')
-                    .forEach(option => option.classList.remove('selected'));
+                    .forEach(option => {
+                        option.classList.remove('selected');
+                    });
 
                 button.classList.add('selected');
+
             });
+
         });
 }
 
+// ==========================================
+// NUEVA ASIGNATURA
+// ==========================================
+
 function openNewSubject() {
+
     editingSubjectId = null;
 
     document.getElementById('subject-form').reset();
@@ -271,16 +376,27 @@ function openNewSubject() {
     document.getElementById('subject-modal').hidden = false;
 }
 
+// ==========================================
+// EDITAR ASIGNATURA
+// ==========================================
+
 function editSubject(id) {
+
     const subject = subjects.find(item => item.id === id);
 
     if (!subject) return;
 
     editingSubjectId = id;
 
-    document.getElementById('subject-name').value = subject.name || '';
-    document.getElementById('subject-code').value = subject.code || '';
-    document.getElementById('subject-teacher').value = subject.teacher || '';
+    document.getElementById('subject-name').value =
+        subject.name || '';
+
+    document.getElementById('subject-code').value =
+        subject.code || '';
+
+    document.getElementById('subject-teacher').value =
+        subject.teacher || '';
+
     document.getElementById('subject-description').value =
         subject.description || '';
 
@@ -292,31 +408,47 @@ function editSubject(id) {
 
     document.querySelectorAll('.subject-color-option')
         .forEach(button => {
+
             button.classList.toggle(
                 'selected',
                 button.dataset.color === (subject.color || colors[0])
             );
+
         });
 
     document.getElementById('subject-error').textContent = '';
+
     document.getElementById('subject-modal').hidden = false;
 }
 
+// ==========================================
+// CERRAR FORMULARIO
+// ==========================================
+
 function closeSubjectModal() {
+
     document.getElementById('subject-modal').hidden = true;
+
     editingSubjectId = null;
 }
 
+// ==========================================
+// GUARDAR ASIGNATURA
+// ==========================================
+
 async function saveSubject(event) {
+
     event.preventDefault();
 
     const saveButton = document.getElementById('subject-save');
     const errorContainer = document.getElementById('subject-error');
 
-    const name = document.getElementById('subject-name').value.trim();
+    const name = document.getElementById('subject-name')
+        .value.trim();
 
     if (!name) {
-        errorContainer.textContent = 'El nombre es obligatorio.';
+        errorContainer.textContent =
+            'El nombre de la asignatura es obligatorio.';
         return;
     }
 
@@ -324,50 +456,91 @@ async function saveSubject(event) {
         '.subject-color-option.selected'
     );
 
-    const payload = {
-        name,
-        code: document.getElementById('subject-code').value.trim() || null,
-        teacher: document.getElementById('subject-teacher').value.trim() || null,
-        description: document.getElementById('subject-description').value.trim() || null,
-        color: selectedColor?.dataset.color || colors[0]
-    };
+    const wasEditing = Boolean(editingSubjectId);
+    const subjectId = editingSubjectId;
 
     saveButton.disabled = true;
     saveButton.textContent = 'Guardando...';
+
     errorContainer.textContent = '';
 
     try {
+
+        // Obtener usuario autenticado
+        const {
+            data: userData,
+            error: userError
+        } = await supabase.auth.getUser();
+
+        if (userError) throw userError;
+
+        if (!userData.user) {
+            throw new Error(
+                'No existe una sesión activa. Inicia sesión nuevamente.'
+            );
+        }
+
+        // Preparar datos
+        const payload = {
+            user_id: userData.user.id,
+            name,
+            code: document.getElementById('subject-code')
+                .value.trim() || null,
+            teacher: document.getElementById('subject-teacher')
+                .value.trim() || null,
+            description: document.getElementById('subject-description')
+                .value.trim() || null,
+            color: selectedColor?.dataset.color || colors[0]
+        };
+
         let result;
 
-        if (editingSubjectId) {
+        if (wasEditing) {
+
             result = await supabase
                 .from('subjects')
                 .update(payload)
-                .eq('id', editingSubjectId);
+                .eq('id', subjectId);
+
         } else {
+
             result = await supabase
                 .from('subjects')
                 .insert(payload);
+
         }
 
         if (result.error) throw result.error;
 
         closeSubjectModal();
+
         await loadSubjects();
 
     } catch (error) {
+
         console.error('Error guardando asignatura:', error);
+
         errorContainer.textContent =
-            'No fue posible guardar. Revisa tu conexión e inténtalo nuevamente.';
+            error.message ||
+            'No fue posible guardar la asignatura.';
+
     } finally {
+
         saveButton.disabled = false;
-        saveButton.textContent = editingSubjectId
+
+        saveButton.textContent = wasEditing
             ? 'Guardar cambios'
             : 'Guardar asignatura';
+
     }
 }
 
+// ==========================================
+// ELIMINAR ASIGNATURA
+// ==========================================
+
 async function deleteSubject(id) {
+
     const subject = subjects.find(item => item.id === id);
 
     if (!subject) return;
@@ -379,6 +552,7 @@ async function deleteSubject(id) {
     if (!confirmed) return;
 
     try {
+
         const { error } = await supabase
             .from('subjects')
             .delete()
@@ -389,7 +563,13 @@ async function deleteSubject(id) {
         await loadSubjects();
 
     } catch (error) {
+
         console.error('Error eliminando asignatura:', error);
-        alert('No fue posible eliminar la asignatura.');
+
+        alert(
+            'No fue posible eliminar la asignatura: ' +
+            error.message
+        );
+
     }
 }
