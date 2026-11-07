@@ -3,36 +3,65 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#101827">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#0f172a">
 
     <meta name="description"
-        content="AulaPlan: organiza tus clases, evaluaciones y sesiones de estudio.">
+        content="AulaPlan: organiza tus asignaturas, horarios, evaluaciones y sesiones de estudio en un solo lugar.">
 
-    <title>AulaPlan | Tu vida académica organizada</title>
+    <title>AulaPlan | Tu vida académica, bajo control</title>
 
-    <link rel="stylesheet" href="./assets/css/styles.css">
-    <link rel="stylesheet" href="./assets/css/auth.css">
-    <link rel="stylesheet" href="./assets/css/dashboard.css">
-    <link rel="stylesheet" href="./assets/css/subjects.css">
-
+    <!-- Tipografía -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
 
+    <!-- Estilos principales -->
+    <link rel="stylesheet" href="./assets/css/styles.css">
+
+    <!-- Estilos de autenticación -->
+    <link rel="stylesheet" href="./assets/css/auth.css">
+
+    <!-- Estilos del dashboard -->
+    <link rel="stylesheet" href="./assets/css/dashboard.css">
+
+    <!-- Estilos de asignaturas -->
+    <link rel="stylesheet" href="./assets/css/subjects.css">
+
+    <!-- Estilos del horario -->
+    <link rel="stylesheet" href="./assets/css/schedule.css">
+
+    <!-- Iconos -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <meta name="color-scheme" content="dark light">
 </head>
 
 <body>
 
+    <!-- Contenedor principal de AulaPlan -->
     <div id="app">
+
         <main class="app-loading">
-            <p>AulaPlan</p>
+            <div class="app-loading-brand">
+                <h1>AulaPlan</h1>
+                <p>Tu vida académica, bajo control.</p>
+            </div>
+
+            <div class="app-loading-indicator"></div>
+
             <span>Preparando tu espacio académico...</span>
         </main>
+
     </div>
 
+    <!-- Aplicación principal -->
     <script type="module" src="./assets/js/app.js"></script>
 
 </body>
