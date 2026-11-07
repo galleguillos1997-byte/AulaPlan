@@ -243,12 +243,34 @@ function populateSubjectOptions(selectedId = '') {
     `;
 }
 
+
 function renderScheduleCalendar() {
     const list = document.getElementById('schedule-list');
 
     if (!list) return;
 
-    const activeSchedules = schedules.filter(item => item.is_active);
+    // Fecha actual en formato local YYYY-MM-DD
+    const now = new Date();
+    const today = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, '0'),
+        String(now.getDate()).padStart(2, '0')
+    ].join('-');
+
+    // Mostrar únicamente horarios activos y vigentes
+    const activeSchedules = schedules.filter(item => {
+        if (!item.is_active) return false;
+
+        if (item.valid_from && item.valid_from > today) {
+            return false;
+        }
+
+        if (item.valid_until && item.valid_until < today) {
+            return false;
+        }
+
+        return true;
+    });
 
     document.getElementById('schedule-total').textContent =
         activeSchedules.length;
@@ -266,11 +288,122 @@ function renderScheduleCalendar() {
                 <div class="schedule-empty-icon">▦</div>
                 <h3>Primero registra tus asignaturas</h3>
                 <p>Para crear un horario necesitas tener asignaturas
-                inscritas en el módulo Mis asignaturas.</p>
+                inscritas en Mis asignaturas.</p>
             </div>
         `;
         return;
     }
+
+    if (!activeSchedules.length) {
+        list.innerHTML = `
+            <div class="schedule-empty">
+                <div class="schedule-empty-icon">▦</div>
+                <h3>Tu horario está vacío</h3>
+                <p>No tienes clases vigentes registradas.
+                Puedes agregar tus primeras clases.</p>
+                <button id="schedule-empty-new"
+                    class="schedule-primary-button">
+                    + Agregar primera clase
+                </button>
+            </div>
+        `;
+
+        document.getElementById('schedule-empty-new')
+            ?.addEventListener('click', openNewSchedule);
+
+        return;
+    }
+
+    list.innerHTML = weekdays.map(day => {
+        const daySchedules = activeSchedules
+            .filter(item => Number(item.weekday) === day.value)
+            .sort((a, b) => formatTime(a.start_time)
+                .localeCompare(formatTime(b.start_time)));
+
+        return `
+            <section class="schedule-day">
+                <header class="schedule-day-header">
+                    <h3>${day.label}</h3>
+                    <span>${daySchedules.length}
+                        ${daySchedules.length === 1 ? 'clase' : 'clases'}
+                    </span>
+                </header>
+
+                <div class="schedule-day-content">
+                    ${daySchedules.length
+                        ? daySchedules.map(item => {
+                            const subject = getSubject(item.subject_id);
+
+                            if (!subject) return '';
+
+                            return `
+                                <article class="schedule-class-card"
+                                    style="--schedule-color:${escapeHTML(subject.color || '#4F46E5')}">
+
+                                    <div class="schedule-class-time">
+                                        ${formatTime(item.start_time)}
+                                        – ${formatTime(item.end_time)}
+                                    </div>
+
+                                    <div class="schedule-class-info">
+                                        <strong>${escapeHTML(subject.name)}</strong>
+
+                                        <span>
+                                            ${escapeHTML(
+                                                modalityLabels[item.modality]
+                                                || 'Sin modalidad'
+                                            )}
+                                            ${item.classroom
+                                                ? ` · ${escapeHTML(item.classroom)}`
+                                                : ''}
+                                        </span>
+
+                                        ${item.teacher ? `
+                                            <small>
+                                                Docente: ${escapeHTML(item.teacher)}
+                                            </small>
+                                        ` : ''}
+                                    </div>
+
+                                    <div class="schedule-card-actions">
+                                        <button type="button"
+                                            class="schedule-edit-button"
+                                            data-edit="${escapeHTML(item.id)}"
+                                            aria-label="Editar clase"
+                                            title="Editar clase">
+                                            ✎
+                                        </button>
+
+                                        <button type="button"
+                                            class="schedule-delete-button"
+                                            data-delete="${escapeHTML(item.id)}"
+                                            aria-label="Eliminar clase"
+                                            title="Eliminar clase">
+                                            🗑
+                                        </button>
+                                    </div>
+                                </article>
+                            `;
+                        }).join('')
+                        : '<p class="schedule-no-classes">Sin clases registradas</p>'
+                    }
+                </div>
+            </section>
+        `;
+    }).join('');
+
+    list.querySelectorAll('[data-edit]').forEach(button => {
+        button.addEventListener('click', () => {
+            editSchedule(button.dataset.edit);
+        });
+    });
+
+    list.querySelectorAll('[data-delete]').forEach(button => {
+        button.addEventListener('click', () => {
+            deleteSchedule(button.dataset.delete);
+        });
+    });
+}
 
     if (!activeSchedules.length) {
         list.innerHTML = `
