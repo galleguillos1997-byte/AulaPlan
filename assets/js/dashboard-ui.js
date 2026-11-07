@@ -27,6 +27,41 @@ const navigation = [
     }
 ];
 
+// MÓDULOS QUE SE INCORPORARÁN PRÓXIMAMENTE
+
+const upcomingNavigation = [
+    {
+        id: 'study-planner',
+        icon: '◷',
+        label: 'Planificador inteligente de estudio'
+    },
+    {
+        id: 'academic-assistant',
+        icon: '✦',
+        label: 'Asistente académico'
+    },
+    {
+        id: 'habits',
+        icon: '◎',
+        label: 'Seguimiento de hábitos y rendimiento'
+    },
+    {
+        id: 'statistics',
+        icon: '▥',
+        label: 'Estadísticas académicas'
+    },
+    {
+        id: 'notifications',
+        icon: '♧',
+        label: 'Notificaciones y recordatorios'
+    },
+    {
+        id: 'workplace',
+        icon: '▦',
+        label: 'AulaPlan Workplace'
+    }
+];
+
 const weekdays = [
     { value: 1, label: 'Lunes', short: 'Lun' },
     { value: 2, label: 'Martes', short: 'Mar' },
@@ -60,6 +95,7 @@ const activityLabels = {
 };
 
 let dashboardUser = null;
+
 let dashboardData = {
     subjects: [],
     schedules: [],
@@ -381,19 +417,57 @@ function getSubjectAverage(subject) {
 
 function renderNavigation() {
     return `
-        <div class="dashboard-nav-label">MENÚ PRINCIPAL</div>
+        <div class="dashboard-nav-label">
+            MENÚ PRINCIPAL
+        </div>
 
         <nav class="dashboard-nav">
+
             ${navigation.map(item => `
                 <button
                     type="button"
                     class="dashboard-nav-item ${item.id === 'dashboard' ? 'active' : ''}"
                     data-section="${item.id}">
-                    <span class="dashboard-nav-icon">${item.icon}</span>
+
+                    <span class="dashboard-nav-icon">
+                        ${item.icon}
+                    </span>
+
                     <span>${item.label}</span>
+
                 </button>
             `).join('')}
+
         </nav>
+
+        <div class="dashboard-nav-label dashboard-nav-upcoming-label">
+            PRÓXIMAMENTE
+        </div>
+
+        <div class="dashboard-nav-upcoming">
+
+            ${upcomingNavigation.map(item => `
+                <div
+                    class="dashboard-nav-disabled"
+                    aria-disabled="true"
+                    title="Esta función estará disponible próximamente">
+
+                    <span class="dashboard-nav-icon">
+                        ${item.icon}
+                    </span>
+
+                    <span class="dashboard-nav-upcoming-name">
+                        ${item.label}
+                    </span>
+
+                    <span class="dashboard-coming-soon">
+                        Próximamente
+                    </span>
+
+                </div>
+            `).join('')}
+
+        </div>
     `;
 }
 
@@ -531,8 +605,6 @@ function renderDashboardContent(firstName) {
     const pendingTasks = pendingActivities.filter(activity =>
         !evaluationTypes.includes(activity.activity_type)
     );
-
-    const todaySchedules = getSchedulesForDay(today);
 
     const weekScheduleCount = weekDates.reduce(
         (total, day) => total + getSchedulesForDay(day.date).length,
