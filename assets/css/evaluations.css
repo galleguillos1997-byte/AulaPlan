@@ -1,1 +1,1219 @@
 
+/* ======================================================
+   AULAPLAN - EVALUACIONES Y TAREAS
+====================================================== */
+
+.evaluations-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+    color: var(--text-primary, #f1f5f9);
+}
+
+.evaluations-page * {
+    box-sizing: border-box;
+}
+
+/* ======================================================
+   ENCABEZADO
+====================================================== */
+
+.evaluations-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.evaluations-eyebrow {
+    display: inline-block;
+    margin-bottom: 9px;
+    color: #818cf8;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.evaluations-header h1 {
+    margin: 0;
+    font-size: clamp(25px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.evaluations-header p {
+    margin: 9px 0 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ======================================================
+   PESTAÑAS
+====================================================== */
+
+.evaluations-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    padding: 6px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 13px;
+    background: var(--card-background, rgba(30,41,59,.55));
+    width: fit-content;
+    max-width: 100%;
+}
+
+.evaluations-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 17px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.evaluations-tab:hover {
+    color: var(--text-primary, #f1f5f9);
+    background: rgba(148,163,184,.08);
+}
+
+.evaluations-tab.active {
+    color: #fff;
+    background: #4f46e5;
+    box-shadow: 0 3px 12px rgba(79,70,229,.22);
+}
+
+/* ======================================================
+   RESUMEN GENERAL
+====================================================== */
+
+.evaluations-overview {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.evaluation-stat-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-height: 112px;
+    padding: 21px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 15px;
+    background: var(--card-background, rgba(30,41,59,.55));
+}
+
+.evaluation-stat-card span {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.evaluation-stat-card strong {
+    font-size: 29px;
+    font-weight: 800;
+}
+
+.evaluation-stat-card > i {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    color: rgba(129,140,248,.25);
+    font-size: 30px;
+}
+
+/* ======================================================
+   ENCABEZADOS DE SECCIÓN
+====================================================== */
+
+.evaluations-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 17px;
+}
+
+.evaluations-section-heading h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.evaluations-section-heading p {
+    margin: 6px 0 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 13px;
+}
+
+/* ======================================================
+   TARJETAS DE ASIGNATURAS
+====================================================== */
+
+.evaluation-subject-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.evaluation-subject-card {
+    min-width: 0;
+    padding: 23px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 17px;
+    background: var(--card-background, rgba(30,41,59,.55));
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+}
+
+.evaluation-subject-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.evaluation-subject-identity {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+
+.evaluation-subject-color {
+    display: inline-block;
+    flex: 0 0 5px;
+    width: 5px;
+    height: 42px;
+    border-radius: 10px;
+}
+
+.evaluation-subject-identity h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.evaluation-subject-identity > div > span {
+    display: inline-block;
+    margin-top: 5px;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 11px;
+}
+
+.evaluation-settings-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 37px;
+    width: 37px;
+    height: 37px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.2));
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-secondary, #94a3b8);
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.evaluation-settings-button:hover {
+    color: #a5b4fc;
+    background: rgba(99,102,241,.12);
+    border-color: rgba(99,102,241,.4);
+}
+
+.evaluation-subject-settings-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 25px;
+    margin-top: 17px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(148,163,184,.055);
+    color: var(--text-secondary, #94a3b8);
+    font-size: 12px;
+}
+
+.evaluation-subject-settings-summary strong {
+    color: var(--text-primary, #f1f5f9);
+    margin-left: 4px;
+}
+
+/* ======================================================
+   PONDERACIONES
+====================================================== */
+
+.evaluation-weight-section {
+    margin-top: 22px;
+}
+
+.evaluation-weight-header,
+.evaluation-weight-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.evaluation-weight-header {
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--text-secondary, #94a3b8);
+}
+
+.evaluation-weight-header strong {
+    color: var(--text-primary, #f1f5f9);
+    font-size: 13px;
+}
+
+.evaluation-weight-header strong.weight-danger {
+    color: #f87171;
+}
+
+.evaluation-progress-track {
+    width: 100%;
+    height: 9px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(148,163,184,.14);
+}
+
+.evaluation-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #6366f1, #818cf8);
+    transition: width .3s ease;
+}
+
+.evaluation-progress-fill.danger {
+    background: #ef4444;
+}
+
+.evaluation-weight-footer {
+    margin-top: 8px;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 11px;
+}
+
+/* ======================================================
+   NOTA NECESARIA
+====================================================== */
+
+.evaluation-grade-summary {
+    margin-top: 20px;
+}
+
+.evaluation-required-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.evaluation-required-grade {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    padding: 15px 17px;
+    border: 1px solid rgba(99,102,241,.18);
+    border-radius: 12px;
+    background: rgba(99,102,241,.07);
+}
+
+.evaluation-required-grade > span {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.evaluation-required-grade strong {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.evaluation-required-grade small {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.grade-achievable {
+    color: #34d399;
+}
+
+.grade-challenging {
+    color: #fbbf24;
+}
+
+.grade-impossible {
+    color: #f87171;
+}
+
+.grade-neutral {
+    color: var(--text-secondary, #94a3b8);
+}
+
+/* ======================================================
+   TABLA DE EVALUACIONES
+====================================================== */
+
+.evaluation-table-wrapper {
+    width: 100%;
+    margin-top: 20px;
+    overflow-x: auto;
+    border: 1px solid var(--border-color, rgba(148,163,184,.14));
+    border-radius: 12px;
+}
+
+.evaluation-table {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.evaluation-table th {
+    padding: 13px 14px;
+    background: rgba(148,163,184,.07);
+    color: var(--text-secondary, #94a3b8);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    white-space: nowrap;
+}
+
+.evaluation-table td {
+    padding: 14px;
+    border-top: 1px solid var(--border-color, rgba(148,163,184,.1));
+    color: var(--text-primary, #f1f5f9);
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.evaluation-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.evaluation-name-cell strong {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.evaluation-name-cell small {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 10px;
+}
+
+.evaluation-grade-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 63px;
+    padding: 6px 9px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.evaluation-grade-pill.graded {
+    color: #34d399;
+    background: rgba(16,185,129,.1);
+}
+
+.evaluation-grade-pill.pending {
+    color: #fbbf24;
+    background: rgba(245,158,11,.1);
+}
+
+.evaluation-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.evaluation-row-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-secondary, #94a3b8);
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.evaluation-row-actions button:hover {
+    color: #a5b4fc;
+    background: rgba(99,102,241,.12);
+}
+
+.evaluation-row-actions button:last-child:hover {
+    color: #f87171;
+    background: rgba(248,113,113,.1);
+}
+
+.evaluation-no-items {
+    padding: 23px 15px;
+    color: var(--text-secondary, #94a3b8);
+    text-align: center;
+    font-size: 12px;
+}
+
+/* ======================================================
+   BOTONES DE ASIGNATURA
+====================================================== */
+
+.evaluation-subject-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 17px;
+}
+
+.evaluation-add-button,
+.evaluation-add-task-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 39px;
+    padding: 9px 14px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.evaluation-add-button {
+    border: 1px solid #4f46e5;
+    background: #4f46e5;
+    color: #fff;
+}
+
+.evaluation-add-button:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.evaluation-add-task-button {
+    border: 1px solid var(--border-color, rgba(148,163,184,.2));
+    background: transparent;
+    color: var(--text-primary, #f1f5f9);
+}
+
+.evaluation-add-task-button:hover {
+    background: rgba(148,163,184,.08);
+}
+
+/* ======================================================
+   MODALES
+====================================================== */
+
+.evaluation-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+}
+
+.evaluation-modal[hidden] {
+    display: none !important;
+}
+
+.evaluation-modal-backdrop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(2,6,23,.78);
+    backdrop-filter: blur(5px);
+}
+
+.evaluation-modal-content {
+    width: 100%;
+    max-width: 540px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding: 25px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.2));
+    border-radius: 17px;
+    background: var(--card-background, #1e293b);
+    box-shadow: 0 25px 80px rgba(0,0,0,.35);
+}
+
+.evaluation-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+.evaluation-modal-header span {
+    color: #818cf8;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.evaluation-modal-header h2 {
+    margin: 7px 0 0;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.evaluation-modal-header p {
+    margin: 6px 0 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 12px;
+}
+
+.evaluation-modal-header > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.2));
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.evaluation-modal-header > button:hover {
+    color: #f87171;
+    background: rgba(248,113,113,.1);
+}
+
+/* ======================================================
+   FORMULARIOS
+====================================================== */
+
+.evaluation-modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.evaluation-modal-content form > label,
+.evaluation-form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-primary, #f1f5f9);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.evaluation-modal-content input,
+.evaluation-modal-content select,
+.evaluation-modal-content textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.2));
+    border-radius: 9px;
+    outline: none;
+    background: rgba(15,23,42,.55);
+    color: var(--text-primary, #f1f5f9);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.evaluation-modal-content input:focus,
+.evaluation-modal-content select:focus,
+.evaluation-modal-content textarea:focus {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+
+.evaluation-modal-content input::placeholder,
+.evaluation-modal-content textarea::placeholder {
+    color: #64748b;
+}
+
+.evaluation-modal-content select option {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+.evaluation-modal-content textarea {
+    resize: vertical;
+    min-height: 85px;
+}
+
+.evaluation-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.evaluation-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 9px;
+    padding-top: 17px;
+    border-top: 1px solid var(--border-color, rgba(148,163,184,.12));
+}
+
+.evaluation-modal-actions button {
+    min-height: 39px;
+    padding: 9px 14px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.2));
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-primary, #f1f5f9);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.evaluation-modal-actions button:last-child {
+    border-color: #4f46e5;
+    background: #4f46e5;
+    color: #fff;
+}
+
+.evaluation-modal-actions button:last-child:hover {
+    background: #4338ca;
+}
+
+/* ======================================================
+   CONFIGURACIÓN DE EXAMEN
+====================================================== */
+
+.evaluation-exam-toggle {
+    padding: 13px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 9px;
+    background: rgba(148,163,184,.05);
+}
+
+.evaluation-exam-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary, #f1f5f9);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.evaluation-exam-toggle input {
+    width: 17px;
+    min-height: 17px;
+    height: 17px;
+    accent-color: #6366f1;
+}
+
+#exam-weight-field small {
+    display: block;
+    margin-top: 7px;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ======================================================
+   SELECTOR DE ASIGNATURAS
+====================================================== */
+
+.evaluation-subject-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.evaluation-subject-selector button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 50px;
+    padding: 10px 13px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 9px;
+    background: rgba(148,163,184,.04);
+    color: var(--text-primary, #f1f5f9);
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.evaluation-subject-selector button:hover {
+    border-color: rgba(99,102,241,.5);
+    background: rgba(99,102,241,.1);
+}
+
+.evaluation-subject-selector button .evaluation-subject-color {
+    flex: 0 0 5px;
+    height: 28px;
+}
+
+.evaluation-subject-selector button i {
+    margin-left: auto;
+    color: var(--text-secondary, #94a3b8);
+}
+
+/* ======================================================
+   CALENDARIO
+====================================================== */
+
+.evaluation-calendar-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 290px;
+    gap: 20px;
+    align-items: start;
+}
+
+.evaluation-calendar-main,
+.evaluation-upcoming {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 15px;
+    background: var(--card-background, rgba(30,41,59,.55));
+}
+
+.evaluation-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.evaluation-calendar-header h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    text-transform: capitalize;
+}
+
+.evaluation-calendar-header p {
+    margin: 6px 0 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 11px;
+}
+
+.calendar-current-month {
+    padding: 7px 10px;
+    border-radius: 7px;
+    background: rgba(99,102,241,.1);
+    color: #a5b4fc;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.evaluation-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 5px;
+}
+
+.calendar-weekday {
+    padding: 10px 3px;
+    color: var(--text-secondary, #94a3b8);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.calendar-day {
+    min-width: 0;
+    min-height: 92px;
+    padding: 7px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.1));
+    border-radius: 8px;
+    background: rgba(148,163,184,.025);
+}
+
+.calendar-day.empty {
+    border-color: transparent;
+    background: transparent;
+}
+
+.calendar-day.has-events {
+    border-color: rgba(99,102,241,.3);
+    background: rgba(99,102,241,.045);
+}
+
+.calendar-day-number {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-primary, #f1f5f9);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.calendar-day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.calendar-event {
+    padding: 4px 5px;
+    overflow: hidden;
+    border-radius: 4px;
+    font-size: 9px;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calendar-event.event-evaluation {
+    border-left: 2px solid #818cf8;
+    background: rgba(99,102,241,.15);
+    color: #c7d2fe;
+}
+
+.calendar-event.event-task {
+    border-left: 2px solid #34d399;
+    background: rgba(16,185,129,.1);
+    color: #a7f3d0;
+}
+
+.calendar-day-events small {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 9px;
+}
+
+.evaluation-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 17px;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 10px;
+}
+
+.evaluation-calendar-legend span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.evaluation-calendar-legend i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 3px;
+}
+
+.legend-evaluation {
+    background: #818cf8;
+}
+
+.legend-task {
+    background: #34d399;
+}
+
+/* ======================================================
+   PRÓXIMOS COMPROMISOS
+====================================================== */
+
+.evaluation-upcoming h3 {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.upcoming-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 13px 0;
+    border-top: 1px solid var(--border-color, rgba(148,163,184,.1));
+}
+
+.upcoming-date {
+    color: #a5b4fc;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.upcoming-item strong {
+    color: var(--text-primary, #f1f5f9);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+}
+
+.upcoming-item small {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 10px;
+}
+
+.evaluation-calendar-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 17px;
+}
+
+.evaluation-calendar-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 39px;
+    padding: 9px 15px;
+    border: 1px solid #4f46e5;
+    border-radius: 9px;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.evaluation-calendar-actions button:hover {
+    background: #4338ca;
+}
+
+/* ======================================================
+   ESTADOS VACÍOS, CARGA Y ERRORES
+====================================================== */
+
+.evaluations-empty,
+.evaluations-loading,
+.evaluations-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 270px;
+    padding: 30px;
+    border: 1px solid var(--border-color, rgba(148,163,184,.15));
+    border-radius: 15px;
+    background: var(--card-background, rgba(30,41,59,.55));
+    text-align: center;
+}
+
+.evaluations-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 17px;
+    border-radius: 16px;
+    background: rgba(99,102,241,.12);
+    color: #a5b4fc;
+    font-size: 23px;
+}
+
+.evaluations-empty h2,
+.evaluations-error h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.evaluations-empty p,
+.evaluations-error p {
+    max-width: 440px;
+    margin: 10px 0 18px;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.evaluations-empty button,
+.evaluations-error button {
+    padding: 10px 16px;
+    border: 1px solid #4f46e5;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.evaluations-loading {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 13px;
+}
+
+.evaluations-error > i {
+    margin-bottom: 15px;
+    color: #f87171;
+    font-size: 26px;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+@media (max-width: 1000px) {
+    .evaluation-calendar-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .evaluation-upcoming {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 20px;
+    }
+
+    .evaluation-upcoming h3 {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .evaluations-page {
+        padding-bottom: 25px;
+    }
+
+    .evaluations-header {
+        margin-bottom: 20px;
+    }
+
+    .evaluations-tabs {
+        width: 100%;
+    }
+
+    .evaluations-tab {
+        flex: 1;
+        padding: 10px 7px;
+        font-size: 11px;
+    }
+
+    .evaluations-tab i {
+        display: none;
+    }
+
+    .evaluations-overview {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .evaluation-stat-card {
+        min-height: 90px;
+        padding: 13px;
+    }
+
+    .evaluation-stat-card span {
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    .evaluation-stat-card strong {
+        font-size: 23px;
+    }
+
+    .evaluation-stat-card > i {
+        right: 10px;
+        bottom: 10px;
+        font-size: 19px;
+    }
+
+    .evaluation-subject-card {
+        padding: 16px;
+    }
+
+    .evaluation-required-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .evaluation-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .evaluation-calendar-main,
+    .evaluation-upcoming {
+        padding: 13px;
+    }
+
+    .calendar-day {
+        min-height: 65px;
+        padding: 4px;
+    }
+
+    .calendar-event {
+        font-size: 8px;
+        padding: 3px;
+    }
+
+    .calendar-day-number {
+        font-size: 10px;
+    }
+
+    .evaluation-calendar-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .evaluation-upcoming {
+        display: block;
+    }
+}
+
+@media (max-width: 420px) {
+    .evaluations-header h1 {
+        font-size: 24px;
+    }
+
+    .evaluations-header p {
+        font-size: 12px;
+    }
+
+    .evaluation-stat-card {
+        padding: 10px;
+    }
+
+    .evaluation-stat-card strong {
+        font-size: 20px;
+    }
+
+    .evaluation-subject-actions {
+        flex-direction: column;
+    }
+
+    .evaluation-subject-actions button {
+        width: 100%;
+    }
+
+    .evaluation-modal-content {
+        padding: 18px;
+    }
+
+    .evaluation-calendar-grid {
+        gap: 3px;
+    }
+
+    .calendar-day {
+        min-height: 56px;
+    }
+}
+
