@@ -539,37 +539,52 @@ async function saveSubject(event) {
 // ELIMINAR ASIGNATURA
 // ==========================================
 
+
 async function deleteSubject(id) {
-
-    const subject = subjects.find(item => item.id === id);
-
-    if (!subject) return;
-
     const confirmed = confirm(
-        `¿Estás seguro de eliminar la asignatura "${subject.name}"?`
+        '¿Estás seguro de eliminar esta asignatura?\n\n' +
+        'También se eliminarán todos los horarios de clases asociados. ' +
+        'Esta acción no se puede deshacer.'
     );
 
     if (!confirmed) return;
 
     try {
+        const { data: { user }, error: userError } =
+            await supabase.auth.getUser();
 
-        const { error } = await supabase
+        if (userError) throw userError;
+        if (!user) throw new Error('No se encontró la sesión del usuario.');
+
+        // 1. Eliminar los horarios asociados
+        const { error: schedulesError } = await supabase
+            .from('class_schedules')
+            .delete()
+            .eq('subject_id', id)
+            .eq('user_id', user.id);
+
+        if (schedulesError) throw schedulesError;
+
+        // 2. Eliminar la asignatura
+        const { error: subjectError } = await supabase
             .from('subjects')
             .delete()
-            .eq('id', id);
+            .eq('id', id)
+            .eq('user_id', user.id);
 
-        if (error) throw error;
+        if (subjectError) throw subjectError;
 
-        await loadSubjects();
+        alert('Asignatura y horarios asociados eliminados correctamente.');
+
+        // 3. Actualizar la aplicación
+        location.reload();
 
     } catch (error) {
-
-        console.error('Error eliminando asignatura:', error);
+        console.error('Error al eliminar asignatura:', error);
 
         alert(
             'No fue posible eliminar la asignatura: ' +
             error.message
         );
-
     }
 }
