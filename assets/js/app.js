@@ -6,11 +6,13 @@ import { renderDashboardUI } from './dashboard-ui.js';
 const app = document.getElementById('app');
 
 let currentUserId = null;
+let authInitialized = false;
 
 function showDashboard(user) {
     if (!user) return;
 
     currentUserId = user.id;
+
     document.body.classList.remove('auth-page');
 
     renderDashboardUI(user);
@@ -18,17 +20,29 @@ function showDashboard(user) {
 
 function showLogin() {
     currentUserId = null;
+
     document.body.classList.remove('dark');
     document.body.classList.add('auth-page');
 
     renderAuthUI();
 }
 
+// Navegación entre secciones
+document.addEventListener('aulaplan:navigate', (event) => {
+    const section = event.detail?.section;
+
+    if (!section) return;
+
+    console.log('Sección seleccionada:', section);
+});
+
 // Detectar cambios de autenticación
 supabase.auth.onAuthStateChange((event, session) => {
 
     if (event === 'SIGNED_IN' && session?.user) {
-        showDashboard(session.user);
+        if (currentUserId !== session.user.id) {
+            showDashboard(session.user);
+        }
     }
 
     if (event === 'SIGNED_OUT') {
@@ -39,6 +53,10 @@ supabase.auth.onAuthStateChange((event, session) => {
 
 // Iniciar aplicación
 async function initializeApp() {
+    if (authInitialized) return;
+
+    authInitialized = true;
+
     try {
         const { data, error } = await supabase.auth.getSession();
 
