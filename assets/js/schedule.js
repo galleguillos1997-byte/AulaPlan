@@ -43,6 +43,10 @@ function getDayName(day) {
     return weekdays.find(item => item.value === Number(day))?.label || 'Día';
 }
 
+// ==========================================
+// INICIAR MÓDULO
+// ==========================================
+
 export async function renderScheduleUI() {
     const app = document.getElementById('dashboard-view-content');
 
@@ -53,6 +57,7 @@ export async function renderScheduleUI() {
 
     app.innerHTML = `
         <main class="schedule-page">
+
             <header class="schedule-header">
                 <div>
                     <h1>Horario de clases</h1>
@@ -65,6 +70,7 @@ export async function renderScheduleUI() {
             </header>
 
             <section class="schedule-summary">
+
                 <div class="schedule-summary-card">
                     <span>Bloques registrados</span>
                     <strong id="schedule-total">0</strong>
@@ -74,9 +80,11 @@ export async function renderScheduleUI() {
                     <span>Asignaturas con clases</span>
                     <strong id="schedule-subject-total">0</strong>
                 </div>
+
             </section>
 
             <section class="schedule-calendar-section">
+
                 <div class="schedule-section-heading">
                     <div>
                         <h2>Mi semana académica</h2>
@@ -87,87 +95,152 @@ export async function renderScheduleUI() {
                 <div id="schedule-list" class="schedule-week">
                     <p>Cargando horario...</p>
                 </div>
+
             </section>
+
         </main>
 
         <div id="schedule-modal" class="schedule-modal" hidden>
+
             <div class="schedule-modal-content">
+
                 <div class="schedule-modal-header">
                     <div>
                         <h2 id="schedule-modal-title">Agregar clase</h2>
                         <p>Completa los datos de tu bloque académico.</p>
                     </div>
 
-                    <button type="button" id="schedule-close"
-                        aria-label="Cerrar">✕</button>
+                    <button
+                        type="button"
+                        id="schedule-close"
+                        aria-label="Cerrar">
+                        ✕
+                    </button>
                 </div>
 
                 <form id="schedule-form">
-                    <label for="schedule-subject">Asignatura *</label>
+
+                    <label for="schedule-subject">
+                        Asignatura *
+                    </label>
+
                     <select id="schedule-subject" required>
                         <option value="">Selecciona una asignatura</option>
                     </select>
 
-                    <label for="schedule-day">Día de la semana *</label>
+                    <label for="schedule-day">
+                        Día de la semana *
+                    </label>
+
                     <select id="schedule-day" required>
                         ${weekdays.map(day => `
-                            <option value="${day.value}">${day.label}</option>
+                            <option value="${day.value}">
+                                ${day.label}
+                            </option>
                         `).join('')}
                     </select>
 
                     <div class="schedule-time-fields">
+
                         <div>
-                            <label for="schedule-start">Hora de inicio *</label>
-                            <input type="time" id="schedule-start" required>
+                            <label for="schedule-start">
+                                Hora de inicio *
+                            </label>
+
+                            <input
+                                type="time"
+                                id="schedule-start"
+                                required>
                         </div>
 
                         <div>
-                            <label for="schedule-end">Hora de término *</label>
-                            <input type="time" id="schedule-end" required>
+                            <label for="schedule-end">
+                                Hora de término *
+                            </label>
+
+                            <input
+                                type="time"
+                                id="schedule-end"
+                                required>
                         </div>
+
                     </div>
 
-                    <label for="schedule-classroom">Sala o lugar</label>
-                    <input id="schedule-classroom" maxlength="100"
+                    <label for="schedule-classroom">
+                        Sala o lugar
+                    </label>
+
+                    <input
+                        id="schedule-classroom"
+                        maxlength="100"
                         placeholder="Ej. Sala 204">
 
-                    <label for="schedule-modality">Modalidad</label>
+                    <label for="schedule-modality">
+                        Modalidad
+                    </label>
+
                     <select id="schedule-modality">
                         <option value="in_person">Presencial</option>
                         <option value="online">Online</option>
                         <option value="hybrid">Híbrida</option>
                     </select>
 
-                    <label for="schedule-teacher">Docente</label>
-                    <input id="schedule-teacher" maxlength="100"
+                    <label for="schedule-teacher">
+                        Docente
+                    </label>
+
+                    <input
+                        id="schedule-teacher"
+                        maxlength="100"
                         placeholder="Nombre del docente">
 
                     <div class="schedule-validity-fields">
+
                         <div>
-                            <label for="schedule-valid-from">Vigente desde</label>
-                            <input type="date" id="schedule-valid-from">
+                            <label for="schedule-valid-from">
+                                Vigente desde
+                            </label>
+
+                            <input
+                                type="date"
+                                id="schedule-valid-from">
                         </div>
 
                         <div>
-                            <label for="schedule-valid-until">Vigente hasta</label>
-                            <input type="date" id="schedule-valid-until">
+                            <label for="schedule-valid-until">
+                                Vigente hasta
+                            </label>
+
+                            <input
+                                type="date"
+                                id="schedule-valid-until">
                         </div>
+
                     </div>
 
-                    <div id="schedule-error" class="schedule-error"
-                        role="alert"></div>
+                    <div
+                        id="schedule-error"
+                        class="schedule-error"
+                        role="alert">
+                    </div>
 
                     <div class="schedule-modal-actions">
+
                         <button type="button" id="schedule-cancel">
                             Cancelar
                         </button>
 
-                        <button type="submit" id="schedule-save"
+                        <button
+                            type="submit"
+                            id="schedule-save"
                             class="schedule-primary-button">
                             Guardar horario
                         </button>
+
                     </div>
+
                 </form>
+
             </div>
         </div>
     `;
@@ -176,11 +249,18 @@ export async function renderScheduleUI() {
     await loadScheduleData();
 }
 
+// ==========================================
+// CARGAR DATOS DE SUPABASE
+// ==========================================
+
 async function loadScheduleData() {
     const list = document.getElementById('schedule-list');
 
     try {
-        const { data: subjectData, error: subjectError } = await supabase
+        const {
+            data: subjectData,
+            error: subjectError
+        } = await supabase
             .from('subjects')
             .select('id, name, code, color')
             .order('name', { ascending: true });
@@ -189,7 +269,10 @@ async function loadScheduleData() {
 
         subjects = subjectData || [];
 
-        const { data: scheduleData, error: scheduleError } = await supabase
+        const {
+            data: scheduleData,
+            error: scheduleError
+        } = await supabase
             .from('class_schedules')
             .select('*')
             .order('weekday', { ascending: true })
@@ -209,8 +292,12 @@ async function loadScheduleData() {
             <div class="schedule-empty">
                 <h3>No fue posible cargar tu horario</h3>
                 <p>${escapeHTML(error.message)}</p>
-                <button id="schedule-retry"
-                    class="schedule-primary-button">Reintentar</button>
+
+                <button
+                    id="schedule-retry"
+                    class="schedule-primary-button">
+                    Reintentar
+                </button>
             </div>
         `;
 
@@ -219,6 +306,10 @@ async function loadScheduleData() {
     }
 }
 
+// ==========================================
+// OPCIONES DE ASIGNATURAS
+// ==========================================
+
 function populateSubjectOptions(selectedId = '') {
     const select = document.getElementById('schedule-subject');
 
@@ -226,38 +317,47 @@ function populateSubjectOptions(selectedId = '') {
 
     if (!subjects.length) {
         select.innerHTML = `
-            <option value="">Primero debes inscribir una asignatura</option>
+            <option value="">
+                Primero debes inscribir una asignatura
+            </option>
         `;
         return;
     }
 
     select.innerHTML = `
         <option value="">Selecciona una asignatura</option>
+
         ${subjects.map(subject => `
-            <option value="${escapeHTML(subject.id)}"
+            <option
+                value="${escapeHTML(subject.id)}"
                 ${subject.id === selectedId ? 'selected' : ''}>
+
                 ${escapeHTML(subject.name)}
                 ${subject.code ? ` (${escapeHTML(subject.code)})` : ''}
+
             </option>
         `).join('')}
     `;
 }
 
+// ==========================================
+// RENDERIZAR CALENDARIO
+// ==========================================
 
 function renderScheduleCalendar() {
     const list = document.getElementById('schedule-list');
 
     if (!list) return;
 
-    // Fecha actual en formato local YYYY-MM-DD
     const now = new Date();
+
     const today = [
         now.getFullYear(),
         String(now.getMonth() + 1).padStart(2, '0'),
         String(now.getDate()).padStart(2, '0')
     ].join('-');
 
-    // Mostrar únicamente horarios activos y vigentes
+    // Mostrar únicamente horarios activos y vigentes.
     const activeSchedules = schedules.filter(item => {
         if (!item.is_active) return false;
 
@@ -286,11 +386,16 @@ function renderScheduleCalendar() {
         list.innerHTML = `
             <div class="schedule-empty">
                 <div class="schedule-empty-icon">▦</div>
+
                 <h3>Primero registra tus asignaturas</h3>
-                <p>Para crear un horario necesitas tener asignaturas
-                inscritas en Mis asignaturas.</p>
+
+                <p>
+                    Para crear un horario necesitas tener asignaturas
+                    inscritas en Mis asignaturas.
+                </p>
             </div>
         `;
+
         return;
     }
 
@@ -298,10 +403,16 @@ function renderScheduleCalendar() {
         list.innerHTML = `
             <div class="schedule-empty">
                 <div class="schedule-empty-icon">▦</div>
+
                 <h3>Tu horario está vacío</h3>
-                <p>No tienes clases vigentes registradas.
-                Puedes agregar tus primeras clases.</p>
-                <button id="schedule-empty-new"
+
+                <p>
+                    No tienes clases vigentes registradas.
+                    Puedes agregar tus primeras clases.
+                </p>
+
+                <button
+                    id="schedule-empty-new"
                     class="schedule-primary-button">
                     + Agregar primera clase
                 </button>
@@ -315,29 +426,39 @@ function renderScheduleCalendar() {
     }
 
     list.innerHTML = weekdays.map(day => {
+
         const daySchedules = activeSchedules
             .filter(item => Number(item.weekday) === day.value)
-            .sort((a, b) => formatTime(a.start_time)
-                .localeCompare(formatTime(b.start_time)));
+            .sort((a, b) =>
+                formatTime(a.start_time).localeCompare(
+                    formatTime(b.start_time)
+                )
+            );
 
         return `
             <section class="schedule-day">
+
                 <header class="schedule-day-header">
                     <h3>${day.label}</h3>
-                    <span>${daySchedules.length}
+
+                    <span>
+                        ${daySchedules.length}
                         ${daySchedules.length === 1 ? 'clase' : 'clases'}
                     </span>
                 </header>
 
                 <div class="schedule-day-content">
+
                     ${daySchedules.length
                         ? daySchedules.map(item => {
+
                             const subject = getSubject(item.subject_id);
 
                             if (!subject) return '';
 
                             return `
-                                <article class="schedule-class-card"
+                                <article
+                                    class="schedule-class-card"
                                     style="--schedule-color:${escapeHTML(subject.color || '#4F46E5')}">
 
                                     <div class="schedule-class-time">
@@ -346,13 +467,17 @@ function renderScheduleCalendar() {
                                     </div>
 
                                     <div class="schedule-class-info">
-                                        <strong>${escapeHTML(subject.name)}</strong>
+
+                                        <strong>
+                                            ${escapeHTML(subject.name)}
+                                        </strong>
 
                                         <span>
                                             ${escapeHTML(
                                                 modalityLabels[item.modality]
                                                 || 'Sin modalidad'
                                             )}
+
                                             ${item.classroom
                                                 ? ` · ${escapeHTML(item.classroom)}`
                                                 : ''}
@@ -360,13 +485,17 @@ function renderScheduleCalendar() {
 
                                         ${item.teacher ? `
                                             <small>
-                                                Docente: ${escapeHTML(item.teacher)}
+                                                Docente:
+                                                ${escapeHTML(item.teacher)}
                                             </small>
                                         ` : ''}
+
                                     </div>
 
                                     <div class="schedule-card-actions">
-                                        <button type="button"
+
+                                        <button
+                                            type="button"
                                             class="schedule-edit-button"
                                             data-edit="${escapeHTML(item.id)}"
                                             aria-label="Editar clase"
@@ -374,22 +503,30 @@ function renderScheduleCalendar() {
                                             ✎
                                         </button>
 
-                                        <button type="button"
+                                        <button
+                                            type="button"
                                             class="schedule-delete-button"
                                             data-delete="${escapeHTML(item.id)}"
                                             aria-label="Eliminar clase"
                                             title="Eliminar clase">
                                             🗑
                                         </button>
+
                                     </div>
+
                                 </article>
                             `;
+
                         }).join('')
+
                         : '<p class="schedule-no-classes">Sin clases registradas</p>'
                     }
+
                 </div>
+
             </section>
         `;
+
     }).join('');
 
     list.querySelectorAll('[data-edit]').forEach(button => {
@@ -405,103 +542,12 @@ function renderScheduleCalendar() {
     });
 }
 
-    if (!activeSchedules.length) {
-        list.innerHTML = `
-            <div class="schedule-empty">
-                <div class="schedule-empty-icon">▦</div>
-                <h3>Tu horario está vacío</h3>
-                <p>Agrega tus primeras clases para comenzar a organizar
-                tu semana académica.</p>
-                <button id="schedule-empty-new"
-                    class="schedule-primary-button">
-                    + Agregar primera clase
-                </button>
-            </div>
-        `;
-
-        document.getElementById('schedule-empty-new')
-            ?.addEventListener('click', openNewSchedule);
-
-        return;
-    }
-
-    list.innerHTML = weekdays.map(day => {
-        const daySchedules = activeSchedules
-            .filter(item => Number(item.weekday) === day.value)
-            .sort((a, b) => formatTime(a.start_time)
-                .localeCompare(formatTime(b.start_time)));
-
-        return `
-            <section class="schedule-day">
-                <header class="schedule-day-header">
-                    <h3>${day.label}</h3>
-                    <span>${daySchedules.length}
-                        ${daySchedules.length === 1 ? 'clase' : 'clases'}
-                    </span>
-                </header>
-
-                <div class="schedule-day-content">
-                    ${daySchedules.length
-                        ? daySchedules.map(item => {
-                            const subject = getSubject(item.subject_id);
-
-                            if (!subject) return '';
-
-                            return `
-                                <article class="schedule-class-card"
-                                    style="--schedule-color:${escapeHTML(subject.color || '#4F46E5')}"
-                                    data-edit="${escapeHTML(item.id)}">
-
-                                    <div class="schedule-class-time">
-                                        ${formatTime(item.start_time)}
-                                        – ${formatTime(item.end_time)}
-                                    </div>
-
-                                    <div class="schedule-class-info">
-                                        <strong>${escapeHTML(subject.name)}</strong>
-
-                                        <span>
-                                            ${escapeHTML(
-                                                modalityLabels[item.modality]
-                                                || 'Sin modalidad'
-                                            )}
-                                            ${item.classroom
-                                                ? ` · ${escapeHTML(item.classroom)}`
-                                                : ''}
-                                        </span>
-
-                                        ${item.teacher ? `
-                                            <small>
-                                                Docente: ${escapeHTML(item.teacher)}
-                                            </small>
-                                        ` : ''}
-                                    </div>
-
-                                    <button type="button"
-                                        class="schedule-edit-button"
-                                        data-edit="${escapeHTML(item.id)}"
-                                        aria-label="Editar clase">
-                                        ✎
-                                    </button>
-                                </article>
-                            `;
-                        }).join('')
-                        : '<p class="schedule-no-classes">Sin clases registradas</p>'
-                    }
-                </div>
-            </section>
-        `;
-    }).join('');
-
-    list.querySelectorAll('[data-edit]').forEach(element => {
-        element.addEventListener('click', event => {
-            event.stopPropagation();
-            editSchedule(element.dataset.edit);
-        });
-    });
-}
+// ==========================================
+// EVENTOS DEL MÓDULO
+// ==========================================
 
 function bindScheduleEvents() {
+
     document.getElementById('schedule-new')
         ?.addEventListener('click', openNewSchedule);
 
@@ -515,15 +561,23 @@ function bindScheduleEvents() {
         ?.addEventListener('submit', saveSchedule);
 }
 
+// ==========================================
+// NUEVA CLASE
+// ==========================================
+
 function openNewSchedule() {
+
     if (!subjects.length) {
-        alert('Primero debes registrar una asignatura en Mis asignaturas.');
+        alert(
+            'Primero debes registrar una asignatura en Mis asignaturas.'
+        );
         return;
     }
 
     editingScheduleId = null;
 
     document.getElementById('schedule-form').reset();
+
     populateSubjectOptions();
 
     document.getElementById('schedule-modal-title').textContent =
@@ -533,10 +587,16 @@ function openNewSchedule() {
         'Guardar horario';
 
     document.getElementById('schedule-error').textContent = '';
+
     document.getElementById('schedule-modal').hidden = false;
 }
 
+// ==========================================
+// EDITAR CLASE
+// ==========================================
+
 function editSchedule(id) {
+
     const item = schedules.find(schedule => schedule.id === id);
 
     if (!item) return;
@@ -545,9 +605,12 @@ function editSchedule(id) {
 
     populateSubjectOptions(item.subject_id);
 
-    document.getElementById('schedule-day').value = item.weekday;
+    document.getElementById('schedule-day').value =
+        item.weekday;
+
     document.getElementById('schedule-start').value =
         formatTime(item.start_time);
+
     document.getElementById('schedule-end').value =
         formatTime(item.end_time);
 
@@ -573,16 +636,35 @@ function editSchedule(id) {
         'Guardar cambios';
 
     document.getElementById('schedule-error').textContent = '';
+
     document.getElementById('schedule-modal').hidden = false;
 }
 
+// ==========================================
+// CERRAR FORMULARIO
+// ==========================================
+
 function closeScheduleModal() {
+
     document.getElementById('schedule-modal').hidden = true;
+
     editingScheduleId = null;
 }
 
-function hasScheduleConflict(day, start, end, validFrom, validUntil) {
+// ==========================================
+// VALIDAR CRUCES DE HORARIOS
+// ==========================================
+
+function hasScheduleConflict(
+    day,
+    start,
+    end,
+    validFrom,
+    validUntil
+) {
+
     return schedules.some(item => {
+
         if (!item.is_active || item.id === editingScheduleId) {
             return false;
         }
@@ -594,32 +676,47 @@ function hasScheduleConflict(day, start, end, validFrom, validUntil) {
         const existingStart = formatTime(item.start_time);
         const existingEnd = formatTime(item.end_time);
 
-        const timeOverlaps = start < existingEnd && end > existingStart;
+        const timeOverlaps =
+            start < existingEnd && end > existingStart;
 
         if (!timeOverlaps) return false;
 
         const newStartDate = validFrom || '0001-01-01';
         const newEndDate = validUntil || '9999-12-31';
+
         const oldStartDate = item.valid_from || '0001-01-01';
         const oldEndDate = item.valid_until || '9999-12-31';
 
         const datesOverlap =
-            newStartDate <= oldEndDate && newEndDate >= oldStartDate;
+            newStartDate <= oldEndDate &&
+            newEndDate >= oldStartDate;
 
         return datesOverlap;
     });
 }
 
+// ==========================================
+// GUARDAR CLASE
+// ==========================================
+
 async function saveSchedule(event) {
+
     event.preventDefault();
 
     const saveButton = document.getElementById('schedule-save');
     const errorContainer = document.getElementById('schedule-error');
 
-    const subjectId = document.getElementById('schedule-subject').value;
-    const weekday = Number(document.getElementById('schedule-day').value);
-    const startTime = document.getElementById('schedule-start').value;
-    const endTime = document.getElementById('schedule-end').value;
+    const subjectId =
+        document.getElementById('schedule-subject').value;
+
+    const weekday =
+        Number(document.getElementById('schedule-day').value);
+
+    const startTime =
+        document.getElementById('schedule-start').value;
+
+    const endTime =
+        document.getElementById('schedule-end').value;
 
     const validFrom =
         document.getElementById('schedule-valid-from').value || null;
@@ -668,11 +765,15 @@ async function saveSchedule(event) {
 
     saveButton.disabled = true;
     saveButton.textContent = 'Guardando...';
+
     errorContainer.textContent = '';
 
     try {
-        const { data: userData, error: userError } =
-            await supabase.auth.getUser();
+
+        const {
+            data: userData,
+            error: userError
+        } = await supabase.auth.getUser();
 
         if (userError) throw userError;
 
@@ -688,14 +789,18 @@ async function saveSchedule(event) {
             weekday,
             start_time: startTime,
             end_time: endTime,
+
             classroom:
-                document.getElementById('schedule-classroom').value.trim()
-                || null,
+                document.getElementById('schedule-classroom')
+                    .value.trim() || null,
+
             modality:
                 document.getElementById('schedule-modality').value,
+
             teacher:
-                document.getElementById('schedule-teacher').value.trim()
-                || null,
+                document.getElementById('schedule-teacher')
+                    .value.trim() || null,
+
             valid_from: validFrom,
             valid_until: validUntil,
             is_active: true
@@ -704,11 +809,14 @@ async function saveSchedule(event) {
         let result;
 
         if (wasEditing) {
+
             result = await supabase
                 .from('class_schedules')
                 .update(payload)
                 .eq('id', scheduleId);
+
         } else {
+
             result = await supabase
                 .from('class_schedules')
                 .insert(payload);
@@ -717,22 +825,32 @@ async function saveSchedule(event) {
         if (result.error) throw result.error;
 
         closeScheduleModal();
+
         await loadScheduleData();
 
     } catch (error) {
+
         console.error('Error guardando horario:', error);
+
         errorContainer.textContent =
             error.message || 'No fue posible guardar el horario.';
 
     } finally {
+
         saveButton.disabled = false;
+
         saveButton.textContent = wasEditing
             ? 'Guardar cambios'
             : 'Guardar horario';
     }
 }
 
+// ==========================================
+// ELIMINAR CLASE
+// ==========================================
+
 async function deleteSchedule(id) {
+
     const item = schedules.find(schedule => schedule.id === id);
 
     if (!item) return;
@@ -747,6 +865,7 @@ async function deleteSchedule(id) {
     if (!confirmed) return;
 
     try {
+
         const { error } = await supabase
             .from('class_schedules')
             .delete()
@@ -757,7 +876,11 @@ async function deleteSchedule(id) {
         await loadScheduleData();
 
     } catch (error) {
+
         console.error('Error eliminando horario:', error);
-        alert('No fue posible eliminar el horario: ' + error.message);
+
+        alert(
+            'No fue posible eliminar el horario: ' + error.message
+        );
     }
 }
