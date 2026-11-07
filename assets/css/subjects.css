@@ -1,9 +1,9 @@
 
 /* ======================================================
-   AULAPLAN - HORARIO DE CLASES
+   AULAPLAN - MIS ASIGNATURAS
 ====================================================== */
 
-.schedule-page {
+.subjects-page {
     width: 100%;
     max-width: 1500px;
     margin: 0 auto;
@@ -15,7 +15,7 @@
    ENCABEZADO
 ====================================================== */
 
-.schedule-header {
+.subjects-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,20 +23,7 @@
     margin-bottom: 28px;
 }
 
-.schedule-header-copy {
-    min-width: 0;
-}
-
-.schedule-eyebrow {
-    display: block;
-    margin-bottom: 8px;
-    color: #6366f1;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-}
-
-.schedule-header h1 {
+.subjects-header h1 {
     margin: 0;
     color: var(--text-primary, #1e293b);
     font-size: clamp(25px, 3vw, 34px);
@@ -44,7 +31,7 @@
     letter-spacing: -1px;
 }
 
-.schedule-header p {
+.subjects-header p {
     margin: 9px 0 0;
     color: var(--text-secondary, #64748b);
     font-size: 14px;
@@ -52,502 +39,320 @@
 }
 
 /* ======================================================
-   BOTONES
+   BOTÓN PRINCIPAL
 ====================================================== */
 
-.schedule-primary-button,
-.schedule-secondary-button {
+.subject-primary-button {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: 9px;
+    gap: 8px;
     min-height: 42px;
-    padding: 11px 16px;
-    border: 1px solid transparent;
+    padding: 11px 17px;
+    border: 1px solid #4f46e5;
     border-radius: 10px;
+    background: #4f46e5;
+    color: #ffffff;
     font-family: inherit;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.schedule-primary-button {
-    flex-shrink: 0;
-    border-color: #4f46e5;
-    background: #4f46e5;
-    color: #fff;
-}
-
-.schedule-primary-button:hover {
+.subject-primary-button:hover {
     border-color: #4338ca;
     background: #4338ca;
     transform: translateY(-1px);
 }
 
-.schedule-primary-button:disabled {
+.subject-primary-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
 }
 
-.schedule-secondary-button {
-    border-color: var(--border-color, #cbd5e1);
-    background: transparent;
-    color: var(--text-primary, #475569);
-}
-
-.schedule-secondary-button:hover {
-    border-color: #818cf8;
-    background: #eef2ff;
-    color: #4f46e5;
-}
-
 /* ======================================================
-   TARJETAS DE RESUMEN
+   RESUMEN
 ====================================================== */
 
-.schedule-summary {
+.subjects-summary {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
-.schedule-summary-card {
+.subjects-summary > div {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    flex-direction: column;
+    gap: 8px;
     min-width: 0;
-    padding: 20px;
+    padding: 19px 21px;
     border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 15px;
-    background: var(--card-background, #fff);
+    border-radius: 14px;
+    background: var(--card-background, #ffffff);
     box-shadow: 0 4px 15px rgba(15, 23, 42, 0.035);
 }
 
-.schedule-summary-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
-    flex-shrink: 0;
-    border-radius: 12px;
-    background: #eef2ff;
-    color: #6366f1;
-    font-size: 18px;
-}
-
-.schedule-summary-card span {
-    display: block;
-    margin-bottom: 5px;
+.subjects-summary span {
     color: var(--text-secondary, #64748b);
     font-size: 11px;
     font-weight: 600;
 }
 
-.schedule-summary-card strong {
-    display: block;
+.subjects-summary strong {
     color: var(--text-primary, #1e293b);
-    font-size: 25px;
+    font-size: 24px;
     font-weight: 800;
-    line-height: 1.2;
 }
 
 /* ======================================================
-   SECCIÓN SEMANAL
+   GRILLA DE ASIGNATURAS
 ====================================================== */
 
-.schedule-calendar-section {
-    width: 100%;
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
 }
 
-.schedule-section-heading {
+/* ======================================================
+   TARJETAS
+====================================================== */
+
+.subject-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 205px;
+    padding: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 16px;
+    background: var(--card-background, #ffffff);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.045);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.subject-card::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--subject-color, #4f46e5);
+    content: "";
+}
+
+.subject-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--subject-color, #4f46e5);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.09);
+}
+
+.subject-card-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     margin-bottom: 19px;
 }
 
-.schedule-section-heading h2 {
+.subject-color-indicator {
+    display: block;
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
+    border: 1px solid color-mix(in srgb, var(--subject-color, #4f46e5) 25%, transparent);
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--subject-color, #4f46e5) 13%, transparent);
+}
+
+.subject-card h3 {
     margin: 0;
     color: var(--text-primary, #1e293b);
-    font-size: 19px;
+    font-size: 17px;
     font-weight: 800;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
-.schedule-section-heading p {
-    margin: 6px 0 0;
-    color: var(--text-secondary, #64748b);
-    font-size: 12px;
-}
-
-.schedule-week-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 11px;
-    border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 8px;
+.subject-code {
+    margin: 6px 0 17px;
     color: var(--text-secondary, #64748b);
     font-size: 11px;
-    font-weight: 700;
-    white-space: nowrap;
+    font-weight: 600;
 }
 
 /* ======================================================
-   GRILLA SEMANAL
+   INFORMACIÓN DEL DOCENTE
 ====================================================== */
 
-.schedule-week {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 15px;
-    align-items: start;
-}
-
-.schedule-day {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 14px;
-    background: var(--card-background, #fff);
-    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.025);
-}
-
-.schedule-day-today {
-    border-color: #a5b4fc;
-    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.08);
-}
-
-.schedule-day-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 17px;
-    border-bottom: 1px solid var(--border-color, #e2e8f0);
-    background: var(--background-secondary, #f8fafc);
-}
-
-.schedule-day-today .schedule-day-header {
-    background: #eef2ff;
-}
-
-.schedule-day-name {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-}
-
-.schedule-day-name > span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    border-radius: 9px;
-    background: #e2e8f0;
-    color: #475569;
-    font-size: 10px;
-    font-weight: 800;
-}
-
-.schedule-day-today .schedule-day-name > span {
-    background: #4f46e5;
-    color: #fff;
-}
-
-.schedule-day-name h3 {
-    margin: 0;
-    color: var(--text-primary, #334155);
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.schedule-day-count {
-    padding: 5px 8px;
-    border-radius: 20px;
-    background: #f1f5f9;
-    color: #64748b;
-    font-size: 10px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.schedule-day-today .schedule-day-count {
-    background: #e0e7ff;
-    color: #4338ca;
-}
-
-/* ======================================================
-   CONTENIDO DEL DÍA
-====================================================== */
-
-.schedule-day-content {
+.subject-card-details {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    min-height: 85px;
-    padding: 13px;
+    gap: 5px;
+    margin-top: auto;
+    padding-top: 13px;
+    border-top: 1px solid var(--border-color, #e2e8f0);
 }
 
-.schedule-no-classes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    min-height: 57px;
-    color: #94a3b8;
+.subject-card-details span {
+    color: var(--text-secondary, #64748b);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.subject-card-details strong {
+    color: var(--text-primary, #334155);
+    font-size: 12px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.subject-description {
+    margin: 12px 0 0;
+    color: var(--text-secondary, #64748b);
     font-size: 11px;
-}
-
-.schedule-no-classes i {
-    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
 }
 
 /* ======================================================
-   TARJETAS DE CLASE
+   BOTONES DE EDICIÓN Y ELIMINACIÓN
 ====================================================== */
 
-.schedule-class-card {
-    position: relative;
-    min-width: 0;
-    padding: 14px 14px 12px 16px;
-    overflow: hidden;
-    border: 1px solid var(--border-color, #e2e8f0);
-    border-left: 4px solid var(--schedule-color, #6366f1);
-    border-radius: 10px;
-    background: var(--card-background, #fff);
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+.subject-card-actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 6px;
 }
 
-.schedule-class-card:hover {
-    border-color: var(--schedule-color, #6366f1);
-    box-shadow: 0 5px 15px rgba(15, 23, 42, 0.06);
+.subject-card-actions button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 31px;
+    height: 31px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-secondary, #64748b);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subject-card-actions button:hover {
     transform: translateY(-1px);
 }
 
-.schedule-class-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 11px;
-}
-
-.schedule-class-time {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text-secondary, #64748b);
-    font-size: 11px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.schedule-class-time i {
-    color: var(--schedule-color, #6366f1);
-}
-
-.schedule-class-time span {
-    color: #94a3b8;
-}
-
-.schedule-class-subject {
-    overflow-wrap: anywhere;
-    color: var(--text-primary, #1e293b);
-    font-size: 14px;
-    font-weight: 800;
-    line-height: 1.4;
-}
-
-.schedule-class-code {
-    margin-top: 3px;
-    color: var(--text-secondary, #64748b);
-    font-size: 10px;
-    font-weight: 600;
-}
-
-.schedule-class-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px 13px;
-    margin-top: 12px;
-}
-
-.schedule-class-details span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text-secondary, #64748b);
-    font-size: 10px;
-    line-height: 1.4;
-}
-
-.schedule-class-details i {
-    color: var(--schedule-color, #6366f1);
-    font-size: 10px;
-}
-
-.schedule-class-duration {
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border-color, #e2e8f0);
-    color: var(--text-secondary, #94a3b8);
-    font-size: 9px;
-    font-weight: 600;
-}
-
-/* ======================================================
-   ACCIONES DE LAS TARJETAS
-====================================================== */
-
-.schedule-card-actions {
-    display: flex;
-    flex-shrink: 0;
-    gap: 5px;
-}
-
-.schedule-edit-button,
-.schedule-delete-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 7px;
-    background: transparent;
-    color: var(--text-secondary, #64748b);
-    font-size: 10px;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.schedule-edit-button:hover {
+.subject-card-actions button[data-edit]:hover {
     border-color: #a5b4fc;
     background: #eef2ff;
     color: #4f46e5;
 }
 
-.schedule-delete-button:hover {
+.subject-card-actions button[data-delete]:hover {
     border-color: #fecaca;
     background: #fef2f2;
     color: #dc2626;
 }
 
 /* ======================================================
-   ESTADOS VACÍOS Y CARGA
+   ESTADO SIN ASIGNATURAS
 ====================================================== */
 
-.schedule-loading,
-.schedule-state {
+.subject-empty {
     grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 240px;
-    padding: 30px;
-    border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 15px;
-    background: var(--card-background, #fff);
-    color: var(--text-secondary, #64748b);
+    min-height: 270px;
+    padding: 35px 25px;
+    border: 1px dashed var(--border-color, #cbd5e1);
+    border-radius: 16px;
+    background: var(--card-background, #ffffff);
     text-align: center;
 }
 
-.schedule-loading {
-    flex-direction: row;
-    gap: 11px;
-    min-height: 120px;
-    font-size: 12px;
-}
-
-.schedule-loading i {
-    color: #6366f1;
-    font-size: 17px;
-}
-
-.schedule-state-icon {
+.subject-empty-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 60px;
-    margin-bottom: 15px;
-    border-radius: 17px;
+    width: 62px;
+    height: 62px;
+    margin-bottom: 17px;
+    border-radius: 18px;
     background: #eef2ff;
     color: #6366f1;
-    font-size: 25px;
+    font-size: 27px;
 }
 
-.schedule-state h3 {
-    margin: 0 0 8px;
-    color: var(--text-primary, #334155);
-    font-size: 17px;
+.subject-empty h3 {
+    margin: 0 0 9px;
+    color: var(--text-primary, #1e293b);
+    font-size: 18px;
     font-weight: 800;
 }
 
-.schedule-state p {
-    max-width: 430px;
-    margin: 0 0 19px;
+.subject-empty p {
+    max-width: 390px;
+    margin: 0 0 20px;
+    color: var(--text-secondary, #64748b);
     font-size: 12px;
     line-height: 1.6;
-}
-
-.schedule-state-error .schedule-state-icon {
-    background: #fef2f2;
-    color: #dc2626;
 }
 
 /* ======================================================
    MODAL
 ====================================================== */
 
-.schedule-modal[hidden] {
+.subject-modal[hidden] {
     display: none !important;
 }
 
-.schedule-modal {
+.subject-modal {
     position: fixed;
     z-index: 9999;
     inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
 }
 
-.schedule-modal-backdrop {
-    position: absolute;
+.subject-modal::before {
+    position: fixed;
+    z-index: -1;
     inset: 0;
-    background: rgba(15, 23, 42, 0.65);
+    background: rgba(15, 23, 42, 0.68);
     backdrop-filter: blur(4px);
+    content: "";
 }
 
-.schedule-modal-content {
-    position: relative;
-    width: calc(100% - 30px);
-    max-width: 570px;
+.subject-modal-content {
+    width: 100%;
+    max-width: 510px;
     max-height: calc(100vh - 40px);
-    margin: 20px auto;
     padding: 25px;
     overflow-y: auto;
     border: 1px solid var(--border-color, #e2e8f0);
     border-radius: 17px;
-    background: var(--card-background, #fff);
+    background: var(--card-background, #ffffff);
     box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
-    animation: scheduleModalAppear 0.2s ease;
+    animation: subjectModalAppear 0.2s ease;
 }
 
-@keyframes scheduleModalAppear {
+@keyframes subjectModalAppear {
     from {
         opacity: 0;
         transform: translateY(10px) scale(0.99);
@@ -559,15 +364,11 @@
     }
 }
 
-body.schedule-modal-open {
-    overflow: hidden;
-}
-
 /* ======================================================
    ENCABEZADO DEL MODAL
 ====================================================== */
 
-.schedule-modal-header {
+.subject-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -575,44 +376,35 @@ body.schedule-modal-open {
     margin-bottom: 23px;
 }
 
-.schedule-modal-eyebrow {
-    color: #6366f1;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-}
-
-.schedule-modal-header h2 {
-    margin: 6px 0;
-    color: var(--text-primary, #1e293b);
-    font-size: 22px;
-    font-weight: 800;
-}
-
-.schedule-modal-header p {
+.subject-modal-header h2 {
     margin: 0;
-    color: var(--text-secondary, #64748b);
-    font-size: 11px;
-    line-height: 1.5;
+    color: var(--text-primary, #1e293b);
+    font-size: 21px;
+    font-weight: 800;
 }
 
-.schedule-modal-close {
+.subject-modal-header p {
+    margin: 7px 0 0;
+    color: var(--text-secondary, #64748b);
+    font-size: 12px;
+}
+
+.subject-modal-header > button {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 34px;
-    height: 34px;
+    width: 33px;
+    height: 33px;
     flex-shrink: 0;
     border: 1px solid var(--border-color, #e2e8f0);
-    border-radius: 9px;
+    border-radius: 8px;
     background: transparent;
     color: var(--text-secondary, #64748b);
-    font-size: 14px;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.schedule-modal-close:hover {
+.subject-modal-header > button:hover {
     border-color: #fecaca;
     background: #fef2f2;
     color: #dc2626;
@@ -622,78 +414,90 @@ body.schedule-modal-open {
    FORMULARIO
 ====================================================== */
 
-#schedule-form {
+#subject-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 9px;
 }
 
-.schedule-form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    min-width: 0;
-}
-
-.schedule-form-field label {
+#subject-form > label {
+    margin-top: 7px;
     color: var(--text-primary, #334155);
     font-size: 11px;
     font-weight: 700;
 }
 
-.schedule-form-field label span {
-    color: #ef4444;
-}
-
-.schedule-form-field input,
-.schedule-form-field select {
+#subject-form input,
+#subject-form textarea {
     width: 100%;
     min-width: 0;
-    min-height: 41px;
-    padding: 10px 12px;
+    padding: 11px 12px;
     border: 1px solid var(--border-color, #cbd5e1);
-    border-radius: 8px;
+    border-radius: 9px;
     outline: none;
-    background: var(--card-background, #fff);
+    background: var(--card-background, #ffffff);
     color: var(--text-primary, #334155);
     font-family: inherit;
     font-size: 12px;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.schedule-form-field input:focus,
-.schedule-form-field select:focus {
+#subject-form input {
+    min-height: 42px;
+}
+
+#subject-form textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+#subject-form input:focus,
+#subject-form textarea:focus {
     border-color: #818cf8;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
-.schedule-form-field input::placeholder {
+#subject-form input::placeholder,
+#subject-form textarea::placeholder {
     color: #94a3b8;
 }
 
-.schedule-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 13px;
+/* ======================================================
+   SELECTOR DE COLORES
+====================================================== */
+
+.subject-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+    padding: 7px 0 5px;
 }
 
-.schedule-form-divider {
-    padding-top: 5px;
-    border-top: 1px solid var(--border-color, #e2e8f0);
-    color: var(--text-secondary, #64748b);
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
+.subject-color-option {
+    position: relative;
+    width: 29px;
+    height: 29px;
+    border: 3px solid var(--card-background, #ffffff);
+    border-radius: 50%;
+    outline: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease, outline-color 0.2s ease;
+}
+
+.subject-color-option:hover {
+    transform: scale(1.12);
+}
+
+.subject-color-option.selected {
+    outline: 2px solid var(--text-primary, #1e293b);
+    transform: scale(1.08);
 }
 
 /* ======================================================
    ERRORES Y ACCIONES DEL MODAL
 ====================================================== */
 
-.schedule-error {
+.subject-error {
     min-height: 0;
     color: #dc2626;
     font-size: 11px;
@@ -701,41 +505,77 @@ body.schedule-modal-open {
     line-height: 1.5;
 }
 
-.schedule-error:not(:empty) {
-    padding: 11px 12px;
+.subject-error:not(:empty) {
+    margin-top: 7px;
+    padding: 10px 12px;
     border: 1px solid #fecaca;
     border-radius: 8px;
     background: #fef2f2;
 }
 
-.schedule-modal-actions {
+.subject-modal-actions {
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
     gap: 9px;
-    padding-top: 5px;
+    margin-top: 15px;
+}
+
+.subject-modal-actions button:not(.subject-primary-button) {
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid var(--border-color, #cbd5e1);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-primary, #475569);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subject-modal-actions button:not(.subject-primary-button):hover {
+    border-color: #94a3b8;
+    background: var(--background-secondary, #f1f5f9);
+}
+
+/* ======================================================
+   MODO OSCURO
+====================================================== */
+
+body.dark .subject-card,
+body.dark .subjects-summary > div,
+body.dark .subject-empty,
+body.dark .subject-modal-content {
+    background: var(--card-background, #1e293b);
+}
+
+body.dark .subject-card h3,
+body.dark .subject-card-details strong,
+body.dark .subjects-summary strong,
+body.dark .subject-modal-header h2,
+body.dark .subject-empty h3 {
+    color: var(--text-primary, #f1f5f9);
+}
+
+body.dark #subject-form input,
+body.dark #subject-form textarea {
+    background: var(--background-secondary, #0f172a);
+    color: var(--text-primary, #f1f5f9);
+}
+
+body.dark .subject-card-actions button {
+    color: var(--text-secondary, #cbd5e1);
 }
 
 /* ======================================================
    RESPONSIVE: TABLET
 ====================================================== */
 
-@media (max-width: 900px) {
-    .schedule-week {
-        grid-template-columns: 1fr;
-    }
-
-    .schedule-summary {
-        gap: 11px;
-    }
-
-    .schedule-summary-card {
-        padding: 15px;
-    }
-
-    .schedule-summary-icon {
-        width: 39px;
-        height: 39px;
+@media (max-width: 1050px) {
+    .subjects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -744,112 +584,67 @@ body.schedule-modal-open {
 ====================================================== */
 
 @media (max-width: 600px) {
-    .schedule-page {
+    .subjects-page {
         padding-top: 5px;
     }
 
-    .schedule-header {
+    .subjects-header {
         align-items: flex-start;
         flex-direction: column;
         gap: 16px;
         margin-bottom: 21px;
     }
 
-    .schedule-header .schedule-primary-button {
+    .subjects-header .subject-primary-button {
         width: 100%;
     }
 
-    .schedule-header h1 {
+    .subjects-header h1 {
         font-size: 26px;
     }
 
-    .schedule-header p {
+    .subjects-header p {
         font-size: 12px;
     }
 
-    .schedule-summary {
-        grid-template-columns: 1fr;
+    .subjects-summary {
         gap: 9px;
-        margin-bottom: 25px;
+        margin-bottom: 21px;
     }
 
-    .schedule-summary-card {
-        padding: 13px 15px;
+    .subjects-summary > div {
+        padding: 14px;
     }
 
-    .schedule-summary-card strong {
-        font-size: 22px;
+    .subjects-summary strong {
+        font-size: 21px;
     }
 
-    .schedule-section-heading {
+    .subjects-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .subject-card {
+        min-height: 190px;
+        padding: 17px;
+    }
+
+    .subject-modal {
         align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .schedule-section-heading h2 {
-        font-size: 17px;
-    }
-
-    .schedule-week {
-        gap: 11px;
-    }
-
-    .schedule-day-header {
-        padding: 12px;
-    }
-
-    .schedule-day-content {
         padding: 10px;
     }
 
-    .schedule-class-card {
-        padding: 12px 11px 10px 13px;
-    }
-
-    .schedule-modal-content {
-        width: calc(100% - 20px);
+    .subject-modal-content {
         max-height: calc(100vh - 20px);
-        margin: 10px auto;
         padding: 19px;
     }
 
-    .schedule-modal-header h2 {
-        font-size: 20px;
-    }
-
-    .schedule-form-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .schedule-modal-actions {
+    .subject-modal-actions {
         flex-direction: column-reverse;
     }
 
-    .schedule-modal-actions button {
+    .subject-modal-actions button {
         width: 100%;
-    }
-}
-
-/* ======================================================
-   RESPONSIVE: MÓVILES PEQUEÑOS
-====================================================== */
-
-@media (max-width: 360px) {
-    .schedule-day-name h3 {
-        font-size: 12px;
-    }
-
-    .schedule-day-count {
-        font-size: 9px;
-    }
-
-    .schedule-class-time {
-        font-size: 10px;
-    }
-
-    .schedule-class-subject {
-        font-size: 13px;
     }
 }
