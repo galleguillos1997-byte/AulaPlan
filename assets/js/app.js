@@ -2,15 +2,18 @@
 import { supabase } from './config.js';
 import { renderAuthUI } from './auth-ui.js';
 import { renderDashboardUI } from './dashboard-ui.js';
+import { renderSubjectsUI } from './subjects.js';
 
 const app = document.getElementById('app');
 
+let currentUser = null;
 let currentUserId = null;
 let authInitialized = false;
 
 function showDashboard(user) {
     if (!user) return;
 
+    currentUser = user;
     currentUserId = user.id;
 
     document.body.classList.remove('auth-page');
@@ -19,6 +22,7 @@ function showDashboard(user) {
 }
 
 function showLogin() {
+    currentUser = null;
     currentUserId = null;
 
     document.body.classList.remove('dark');
@@ -27,13 +31,26 @@ function showLogin() {
     renderAuthUI();
 }
 
-// Navegación entre secciones
-document.addEventListener('aulaplan:navigate', (event) => {
+// Navegación entre módulos
+document.addEventListener('aulaplan:navigate', async (event) => {
     const section = event.detail?.section;
 
-    if (!section) return;
+    if (!currentUser) return;
 
-    console.log('Sección seleccionada:', section);
+    switch (section) {
+
+        case 'dashboard':
+            showDashboard(currentUser);
+            break;
+
+        case 'subjects':
+            await renderSubjectsUI();
+            break;
+
+        default:
+            console.log('Módulo pendiente de implementación:', section);
+            break;
+    }
 });
 
 // Detectar cambios de autenticación
