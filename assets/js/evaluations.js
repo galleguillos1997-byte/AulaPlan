@@ -292,10 +292,6 @@ function renderSubjectCard(subject) {
 
     const excessWeight = presentationWeight > targetWeight;
 
-    const examActivity = evaluations.find(
-        item => item.activity_type === 'exam'
-    );
-
     const calculation = calculateRequiredGrades(
         subject,
         evaluations
@@ -388,10 +384,7 @@ function renderSubjectCard(subject) {
 
             <div class="evaluation-table-wrapper">
                 ${evaluations.length
-                    ? renderEvaluationTable(
-                        evaluations,
-                        calculation
-                    )
+                    ? renderEvaluationTable(evaluations, calculation)
                     : `
                         <div class="evaluation-no-items">
                             Todavía no tienes evaluaciones registradas.
@@ -608,10 +601,6 @@ function calculateRequiredGrades(subject, evaluations) {
         ? Number(examActivity.grade)
         : null;
 
-    const examPoints = examGrade !== null
-        ? examGrade * examWeight
-        : 0;
-
     let presentationRequired = null;
     let examRequired = null;
 
@@ -636,17 +625,13 @@ function calculateRequiredGrades(subject, evaluations) {
                 earnedPresentationPoints -
                 assumedExamGrade * examWeight
             ) / pendingPresentationWeight;
-        } else {
-            presentationRequired = null;
         }
 
         if (examGrade === null && examWeight > 0) {
-            const assumedPendingGrade = passing;
-
             examRequired = (
                 passing * 100 -
                 earnedPresentationPoints -
-                assumedPendingGrade * pendingPresentationWeight
+                passing * pendingPresentationWeight
             ) / examWeight;
         } else if (examGrade !== null) {
             examRequired = examGrade;
@@ -722,9 +707,7 @@ function openSubjectSettings(subjectId) {
                         <h2>${escapeHTML(subject.name)}</h2>
                     </div>
 
-                    <button type="button" data-close-settings>
-                        ✕
-                    </button>
+                    <button type="button" data-close-settings>✕</button>
                 </div>
 
                 <form id="subject-settings-form">
@@ -923,9 +906,7 @@ function openEvaluationModal(subjectId, activity = null) {
                         <p>${escapeHTML(subject.name)}</p>
                     </div>
 
-                    <button type="button" data-close-evaluation>
-                        ✕
-                    </button>
+                    <button type="button" data-close-evaluation>✕</button>
                 </div>
 
                 <form id="evaluation-form">
@@ -1371,10 +1352,8 @@ function renderCalendar() {
     const today = new Date();
     const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 
-    const [calendarYear, calendarMonth] = [
-        monthStart.getFullYear(),
-        monthStart.getMonth()
-    ];
+    const calendarYear = monthStart.getFullYear();
+    const calendarMonth = monthStart.getMonth();
 
     const firstDay = new Date(calendarYear, calendarMonth, 1);
     const lastDay = new Date(calendarYear, calendarMonth + 1, 0);
@@ -1461,7 +1440,14 @@ function renderCalendar() {
 
             <aside class="evaluation-upcoming">
 
-                <h3>Próximos compromisos</h3>
+                <div class="evaluation-upcoming-header">
+                    <h3>Próximos compromisos</h3>
+
+                    <button type="button" id="calendar-add-task">
+                        <i class="fa-solid fa-plus"></i>
+                        Agregar tarea
+                    </button>
+                </div>
 
                 ${datedActivities.filter(item =>
                     new Date(item.due_at) >= new Date(today.getFullYear(), today.getMonth(), today.getDate())
@@ -1490,13 +1476,6 @@ function renderCalendar() {
 
             </aside>
 
-        </div>
-
-        <div class="evaluation-calendar-actions">
-            <button type="button" id="calendar-add-task">
-                <i class="fa-solid fa-plus"></i>
-                Agregar tarea
-            </button>
         </div>
     `;
 
@@ -1667,4 +1646,3 @@ function escapeHTML(value) {
         "'": '&#039;'
     })[character]);
 }
-
