@@ -179,7 +179,7 @@ function renderDashboard(user) {
 
                 </header>
 
-                <div class="dashboard-content">
+                <div class="dashboard-content" id="dashboard-view-content">
 
                     <section class="dashboard-welcome">
                         <div>
@@ -343,12 +343,7 @@ function bindDashboardEvents() {
                     detail: { section }
                 })
             );
-
-            if (section !== 'dashboard') {
-                alert('La sección "' + button.textContent.trim() +
-                    '" estará disponible en la siguiente etapa.');
-            }
-
+            
             document.querySelector('.dashboard')
                 ?.classList.remove('sidebar-open');
         });
