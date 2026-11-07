@@ -593,4 +593,8 @@
     .schedule-modal-actions button {
         width: 100%;
     }
+
+/* CORRECCIÓN: ocultar el modal cuando no está activo */
+.schedule-modal[hidden] {
+    display: none !important;
 }
