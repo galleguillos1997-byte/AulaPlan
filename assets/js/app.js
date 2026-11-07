@@ -4,6 +4,7 @@ import { renderAuthUI } from './auth-ui.js';
 import { renderDashboardUI } from './dashboard-ui.js';
 import { renderSubjectsUI } from './subjects.js';
 import { renderScheduleUI } from './schedule.js';
+import { renderEvaluationsUI } from './evaluations.js';
 
 const app = document.getElementById('app');
 
@@ -40,26 +41,48 @@ document.addEventListener('aulaplan:navigate', async (event) => {
 
     if (!currentUser) return;
 
-    switch (section) {
+    try {
+        switch (section) {
 
-        case 'dashboard':
-            showDashboard(currentUser);
-            break;
+            case 'dashboard':
+                showDashboard(currentUser);
+                break;
 
-        case 'subjects':
-            await renderSubjectsUI();
-            break;
+            case 'subjects':
+                await renderSubjectsUI();
+                break;
 
-        case 'schedule':
-            await renderScheduleUI();
-            break;
+            case 'schedule':
+                await renderScheduleUI();
+                break;
 
-        default:
-            console.log(
-                'Módulo pendiente de implementación:',
-                section
-            );
-            break;
+            case 'activities':
+            case 'evaluations':
+                await renderEvaluationsUI();
+                break;
+
+            default:
+                console.log(
+                    'Módulo pendiente de implementación:',
+                    section
+                );
+                break;
+        }
+    } catch (error) {
+        console.error('Error al abrir el módulo:', error);
+
+        const content = document.getElementById(
+            'dashboard-view-content'
+        );
+
+        if (content) {
+            content.innerHTML = `
+                <div class="app-error">
+                    <h3>No fue posible abrir esta sección</h3>
+                    <p>Revisa tu conexión e inténtalo nuevamente.</p>
+                </div>
+            `;
+        }
     }
 });
 
