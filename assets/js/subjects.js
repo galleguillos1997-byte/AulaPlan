@@ -1,8 +1,6 @@
 
 import { supabase } from './config.js';
 
-const app = document.getElementById('app');
-
 let subjects = [];
 let editingSubjectId = null;
 
@@ -28,6 +26,13 @@ function escapeHTML(value) {
 }
 
 export async function renderSubjectsUI() {
+    const app = document.getElementById('dashboard-view-content');
+
+    if (!app) {
+        console.error('No se encontró el contenedor del módulo.');
+        return;
+    }
+
     app.innerHTML = `
         <main class="subjects-page">
             <header class="subjects-header">
