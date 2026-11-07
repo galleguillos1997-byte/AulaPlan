@@ -1,38 +1,19 @@
 
 import { supabase } from './config.js';
-import { getCurrentUser, getUserProfile } from './supabase.js';
+import { renderAuthUI } from './auth-ui.js';
 
 const app = document.getElementById('app');
 
 async function initializeApp() {
-    app.innerHTML = `
-        <main class="app-loading">
-            <p>AulaPlan</p>
-            <span>Conectando con tu espacio académico...</span>
-        </main>
-    `;
-
     try {
-        const user = await getCurrentUser();
+        const { data, error } = await supabase.auth.getSession();
 
-        if (user) {
-            const profile = await getUserProfile(user.id);
+        if (error) throw error;
 
-            app.innerHTML = `
-                <main class="app-loading">
-                    <p>AulaPlan</p>
-                    <span>Conexión exitosa con Supabase.</span>
-                    <span>Sesión iniciada: ${escapeHTML(profile.full_name || user.email)}</span>
-                </main>
-            `;
+        if (data.session) {
+            renderAuthenticatedState(data.session.user);
         } else {
-            app.innerHTML = `
-                <main class="app-loading">
-                    <p>AulaPlan</p>
-                    <span>Conexión exitosa con Supabase.</span>
-                    <span>El sistema está preparado para iniciar sesión.</span>
-                </main>
-            `;
+            renderAuthUI();
         }
 
     } catch (error) {
@@ -41,11 +22,38 @@ async function initializeApp() {
         app.innerHTML = `
             <main class="app-loading">
                 <p>AulaPlan</p>
-                <span>No fue posible conectar con Supabase.</span>
-                <span>Revisa la configuración y vuelve a intentarlo.</span>
+                <span>No fue posible iniciar la aplicación.</span>
+                <span>Revisa tu conexión e inténtalo nuevamente.</span>
             </main>
         `;
     }
+}
+
+function renderAuthenticatedState(user) {
+    const name = user.user_metadata?.full_name || user.email;
+
+    app.innerHTML = `
+        <main class="app-loading">
+            <p>AulaPlan</p>
+            <span>Sesión iniciada correctamente.</span>
+            <span>Bienvenido, ${escapeHTML(name)}.</span>
+            <button id="logout-button" class="auth-submit">
+                Cerrar sesión
+            </button>
+        </main>
+    `;
+
+    document.getElementById('logout-button')
+        .addEventListener('click', async () => {
+            const { error } = await supabase.auth.signOut();
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            renderAuthUI();
+        });
 }
 
 function escapeHTML(value) {
@@ -58,8 +66,14 @@ function escapeHTML(value) {
     })[character]);
 }
 
-supabase.auth.onAuthStateChange(() => {
-    // La interfaz se actualizará al implementar el módulo de autenticación.
+supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+        renderAuthenticatedState(session.user);
+    }
+
+    if (event === 'SIGNED_OUT') {
+        renderAuthUI();
+    }
 });
 
 initializeApp();
